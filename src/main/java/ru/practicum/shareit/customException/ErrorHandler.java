@@ -12,8 +12,14 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse conflictEmail (final ConflictException e) {
+    public ErrorResponse conflictEmailException (final ConflictException e) {
         return new ErrorResponse("Ошибка валидации: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus (HttpStatus.NOT_FOUND)
+    public ErrorResponse notFoundException (final IllegalArgumentException e) {
+        return new ErrorResponse("Ошибка ввода: ", e.getMessage());
     }
 
 }

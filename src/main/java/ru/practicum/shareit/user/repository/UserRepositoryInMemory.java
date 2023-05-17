@@ -64,7 +64,7 @@ public class UserRepositoryInMemory implements UserRepository {
                 }
 
             } else {
-                throw new ValidationException("пользователь с данным id существует");
+                throw new ValidationException("пользователь с данным id не существует");
             }
         User userUpd = users.get(id);
         log.debug("Пользователь с id №{} обновлен", id);
