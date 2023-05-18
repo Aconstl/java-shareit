@@ -2,11 +2,13 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,31 +20,44 @@ public class ItemServiceImpl implements  ItemService {
     private final UserRepository userRepository;
 
     @Override
-    public Item newItem(Integer userId, Item item) {
+    public ItemDto newItem(Integer userId, ItemDto itemDto) {
         User user = userRepository.get(userId);
-        return itemRepository.newItem(user,item);
+        Item item = itemRepository.newItem(user,ItemDto.fromDto(itemDto));
+        return ItemDto.toDto(item);
     }
 
     @Override
-    public Item getItem(Integer id) {
-        return itemRepository.getItem(id);
+    public ItemDto getItem(Integer id) {
+        Item item = itemRepository.getItem(id);
+        return ItemDto.toDto(item);
     }
 
     @Override
-    public List<Item> getAllItemUsers(Integer userId) {
+    public List<ItemDto> getAllItemUsers(Integer userId) {
         User user = userRepository.get(userId);
-        return itemRepository.getAllItemUsers(user.getId());
+        List<Item> items = itemRepository.getAllItemUsers(user.getId());
+        List<ItemDto> itemsDto = new ArrayList<>();
+        for (Item i : items) {
+            itemsDto.add(ItemDto.toDto(i));
+        }
+        return itemsDto;
     }
 
     @Override
-    public List<Item> searchFilm(String text) {
-        return itemRepository.searchFilm(text);
+    public List<ItemDto> searchFilm(String text) {
+        List<Item> items = itemRepository.searchFilm(text);
+        List<ItemDto> itemsDto = new ArrayList<>();
+        for (Item i : items) {
+            itemsDto.add(ItemDto.toDto(i));
+        }
+        return itemsDto;
     }
 
     @Override
-    public Item updateItem(Integer userId, Integer itemId, Item item) {
+    public ItemDto updateItem(Integer userId, Integer itemId, ItemDto itemDto) {
         User user = userRepository.get(userId);
-        return itemRepository.updateItem(user.getId(),itemId,item);
+        Item item =  itemRepository.updateItem(user.getId(),itemId,ItemDto.fromDto(itemDto));
+        return ItemDto.toDto(item);
     }
 
     @Override

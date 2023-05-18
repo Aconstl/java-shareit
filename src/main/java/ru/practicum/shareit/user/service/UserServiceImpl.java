@@ -29,12 +29,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(Integer id,User user){
+    public User update(Integer id,User user) {
         return userRepository.update(id,user);
     }
 
     @Override
-    public void delete(Integer id){
+    public void delete(Integer id) {
         userRepository.delete(id);
     }
 

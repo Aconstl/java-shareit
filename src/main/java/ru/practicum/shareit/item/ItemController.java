@@ -2,7 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
@@ -19,31 +19,31 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public Item newItem(@RequestHeader("X-Sharer-User-Id") Integer userId,
-                        @Valid @RequestBody Item item) {
-        return itemService.newItem(userId,item);
+    public ItemDto newItem(@RequestHeader("X-Sharer-User-Id") Integer userId,
+                        @Valid @RequestBody ItemDto itemDto) {
+        return itemService.newItem(userId,itemDto);
     }
 
     @GetMapping("/{id}")
-    public Item getItem(@PathVariable Integer id) {
+    public ItemDto getItem(@PathVariable Integer id) {
         return itemService.getItem(id);
     }
 
     @GetMapping
-    public List<Item> getAllItemUsers(@RequestHeader("X-Sharer-User-Id") Integer userId) {
+    public List<ItemDto> getAllItemUsers(@RequestHeader("X-Sharer-User-Id") Integer userId) {
         return itemService.getAllItemUsers(userId);
     }
 
     @GetMapping("/search")
-    public List<Item> searchFilm(@RequestParam(value = "text", defaultValue = "", required = false) String text) {
+    public List<ItemDto> searchFilm(@RequestParam(value = "text", defaultValue = "", required = false) String text) {
         return itemService.searchFilm(text);
     }
 
     @PatchMapping("/{id}")
-    public Item updateItem(@RequestHeader("X-Sharer-User-Id") Integer userId,
+    public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Integer userId,
                            @PathVariable Integer id,
-                           @RequestBody Item item) {
-        return itemService.updateItem(userId,id,item);
+                           @RequestBody ItemDto itemDto) {
+        return itemService.updateItem(userId,id,itemDto);
     }
 
     @DeleteMapping("/{id}")

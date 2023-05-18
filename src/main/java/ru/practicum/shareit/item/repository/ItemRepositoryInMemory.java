@@ -19,6 +19,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
     private final Map<Integer, Item> items = new HashMap<>();
 
     private int idItem = 1;
+
     @Override
     public Item newItem(User user, Item item) {
         log.trace("добавление новой вещи");
@@ -98,7 +99,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
     }
 
 
-    private boolean isValidId(Integer id){
+    private boolean isValidId(Integer id) {
         if (id == null || id == 0) {
             throw new ValidationException("вещь имеет ошибочное id");
         } else return !items.containsKey(id); // если не найден - true; если найден - false

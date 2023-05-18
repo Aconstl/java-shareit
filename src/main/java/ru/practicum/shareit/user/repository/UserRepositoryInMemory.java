@@ -15,10 +15,11 @@ import java.util.Map;
 @Repository
 public class UserRepositoryInMemory implements UserRepository {
 
-    private final Map <Integer, User> users = new HashMap<>();
-    private final Map <Integer,String> emails = new HashMap<>();
+    private final Map<Integer, User> users = new HashMap<>();
+    private final Map<Integer,String> emails = new HashMap<>();
 
     private int idUser = 1;
+
     @Override
     public User create(User user) {
         log.trace("добавление пользователя");
@@ -80,13 +81,14 @@ public class UserRepositoryInMemory implements UserRepository {
 
 
     private boolean isValidEmail(Integer id,String email) {
-        if ((id != null && emails.containsValue(email) && !emails.get(id).equals(email) )
-                ||(id == null && emails.containsValue(email))) {
+        if ((id != null && emails.containsValue(email) && !emails.get(id).equals(email))
+                || (id == null && emails.containsValue(email))) {
             throw new ConflictException("другой пользователь с данным email существует");
         }
         return true;
     }
-    private boolean isValidId(Integer id){
+
+    private boolean isValidId(Integer id) {
         if (id == null || id == 0) {
             throw new ValidationException("пользователь имеет ошибочное id");
         } else return !users.containsKey(id); // если не найден - true; если найден - false
