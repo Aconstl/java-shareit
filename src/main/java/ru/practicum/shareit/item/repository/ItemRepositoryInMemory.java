@@ -3,7 +3,7 @@ package ru.practicum.shareit.item.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.model.User;
 
 import javax.validation.ValidationException;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
     private int idItem = 1;
 
     @Override
-    public Item newItem(User user, Item item) {
+    public Item create(User user, Item item) {
         log.trace("добавление новой вещи");
         item.setId(idItem++);
         item.setOwner(user);
@@ -30,7 +30,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
     }
 
     @Override
-    public Item getItem(Integer id) {
+    public Item get(Integer id) {
         log.trace("получение вещи");
         if (id == null) {
             throw new NullPointerException("Id вещи указан неверно");
@@ -46,12 +46,12 @@ public class ItemRepositoryInMemory implements ItemRepository {
     public List<Item> getAllItemUsers(Integer userId) {
         log.trace("вывод всех вещей пользователя");
         return items.values().stream()
-                .filter(u -> u.getOwner().getId() == userId)
+                .filter(u -> u.getOwner().getId().equals(userId))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Item> searchFilm(String text) {
+    public List<Item> search(String text) {
         log.trace("поиск вещи по строке");
         if (!text.isBlank()) {
             String textLow = text.toLowerCase();
@@ -66,11 +66,11 @@ public class ItemRepositoryInMemory implements ItemRepository {
     }
 
     @Override
-    public Item updateItem(Integer userId, Integer itemId, Item item) {
+    public Item update(Integer userId, Integer itemId, Item item) {
         log.trace("обновление вещи");
         if (!isValidId(itemId)) {
             Item itemOrig = items.get(itemId);
-            if (itemOrig.getOwner().getId() == userId) {
+            if (itemOrig.getOwner().getId().equals(userId)) {
                 if (item.getName() != null) {
                     itemOrig.setName(item.getName());
                 }
@@ -94,7 +94,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
     }
 
     @Override
-    public void deleteItem(Integer id) {
+    public void delete(Integer id) {
         throw new UnsupportedOperationException("не готов");
     }
 
