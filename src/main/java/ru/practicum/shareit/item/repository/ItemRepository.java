@@ -9,14 +9,14 @@ public interface ItemRepository {
 
     Item create(User user, Item item);
 
-    Item get(Integer id);
+    Item get(Long id);
 
-    List<Item> getAllItemUsers(Integer userId);
+    List<Item> getAllItemUsers(Long userId);
 
     List<Item> search(String text);
 
-    Item update(Integer userId, Integer itemId, Item item);
+    Item update(Long userId, Long itemId, Item item);
 
-    void delete(Integer id);
+    void delete(Long id);
 
 }

@@ -15,10 +15,10 @@ import java.util.Map;
 @Repository
 public class UserRepositoryInMemory implements UserRepository {
 
-    private final Map<Integer, User> users = new HashMap<>();
-    private final Map<Integer,String> emails = new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>();
+    private final Map<Long,String> emails = new HashMap<>();
 
-    private int idUser = 1;
+    private long idUser = 1;
 
     @Override
     public User create(User user) {
@@ -39,7 +39,7 @@ public class UserRepositoryInMemory implements UserRepository {
     }
 
     @Override
-    public User get(Integer id) {
+    public User get(Long id) {
         log.trace("получения пользователя");
         if (id == null) {
             throw new NullPointerException("Id пользователя указан неверно");
@@ -52,13 +52,13 @@ public class UserRepositoryInMemory implements UserRepository {
     }
 
     @Override
-    public User update(Integer id,User user) { //требуется корректировка
+    public User update(Long id,User user) { //требуется корректировка
         log.trace("обновление пользователия");
             if (!isValidId(id)) {
                 User userOrig = users.get(id);
                 if (user.getEmail() != null && isValidEmail(id,user.getEmail())) {
                     userOrig.setEmail(user.getEmail());
-                    emails.put(userOrig.getId(),userOrig.getEmail());
+                  //  emails.put(userOrig.getId(),userOrig.getEmail());
                 }
                 if (user.getName() != null) {
                     userOrig.setName(user.getName());
@@ -73,14 +73,14 @@ public class UserRepositoryInMemory implements UserRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         log.trace("удаление пользователя");
         users.remove(id);
         emails.remove(id);
     }
 
 
-    private boolean isValidEmail(Integer id,String email) {
+    private boolean isValidEmail(Long id,String email) {
         if ((id != null && emails.containsValue(email) && !emails.get(id).equals(email))
                 || (id == null && emails.containsValue(email))) {
             throw new ConflictException("другой пользователь с данным email существует");
@@ -88,7 +88,7 @@ public class UserRepositoryInMemory implements UserRepository {
         return true;
     }
 
-    private boolean isValidId(Integer id) {
+    private boolean isValidId(Long id) {
         if (id == null || id == 0) {
             throw new ValidationException("пользователь имеет ошибочное id");
         } else return !users.containsKey(id); // если не найден - true; если найден - false

@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 @Repository
 public class ItemRepositoryInMemory implements ItemRepository {
 
-    private final Map<Integer, Item> items = new HashMap<>();
+    private final Map<Long, Item> items = new HashMap<>();
 
-    private int idItem = 1;
+    private long idItem = 1;
 
     @Override
     public Item create(User user, Item item) {
@@ -30,7 +30,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
     }
 
     @Override
-    public Item get(Integer id) {
+    public Item get(Long id) {
         log.trace("получение вещи");
         if (id == null) {
             throw new NullPointerException("Id вещи указан неверно");
@@ -43,7 +43,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
     }
 
     @Override
-    public List<Item> getAllItemUsers(Integer userId) {
+    public List<Item> getAllItemUsers(Long userId) {
         log.trace("вывод всех вещей пользователя");
         return items.values().stream()
                 .filter(u -> u.getOwner().getId().equals(userId))
@@ -66,7 +66,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
     }
 
     @Override
-    public Item update(Integer userId, Integer itemId, Item item) {
+    public Item update(Long userId, Long itemId, Item item) {
         log.trace("обновление вещи");
         if (!isValidId(itemId)) {
             Item itemOrig = items.get(itemId);
@@ -94,12 +94,12 @@ public class ItemRepositoryInMemory implements ItemRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         throw new UnsupportedOperationException("не готов");
     }
 
 
-    private boolean isValidId(Integer id) {
+    private boolean isValidId(Long id) {
         if (id == null || id == 0) {
             throw new ValidationException("вещь имеет ошибочное id");
         } else return !items.containsKey(id); // если не найден - true; если найден - false

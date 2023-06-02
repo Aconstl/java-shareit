@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 public class ItemDto {
-    private Integer id;
+    private Long id;
     @NotBlank
     private String name;    // имя вещи
     @NotBlank

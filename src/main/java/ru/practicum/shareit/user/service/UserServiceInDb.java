@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,12 @@ import ru.practicum.shareit.user.model.UserDto;
 import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepositoryInDb;
 
-import java.util.ArrayList;
+import javax.transaction.Transactional;
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Qualifier("UserServiceInDb")
@@ -24,36 +27,74 @@ public class UserServiceInDb implements UserService {
     private final UserRepositoryInDb userRepository;
 
     @Override
+    @Transactional
     public UserDto create(UserDto userDto) {
-        User user = userRepository.save(UserMapper.fromDto(userDto));
-        return UserMapper.toDto(user);
+        log.trace("добавление пользователя");
+        User userTo = UserMapper.fromDto(userDto);
+            User user = userRepository.save(userTo);
+            return UserMapper.toDto(user);
     }
 
     @Override
-    public UserDto get(Integer id) {
-        Optional<User> user = userRepository.findById(id.longValue());
+    @Transactional
+    public UserDto get(Long id) {
+        log.trace("получение пользователя");
+        if (id == null || id == 0) {
+            throw new NullPointerException("Id пользователя указан неверно");
+        }
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("Пользователь с Id № " + id + " не найден");
+        }
+        log.debug("Пользователь с id №{} получен", id);
         return UserMapper.toDto(user.get());
     }
 
     @Override
+    @Transactional
     public List<UserDto> getAll() {
+        log.trace("получение всех пользователей");
         List<User> users = userRepository.findAll();
-        List<UserDto> usersDto = new ArrayList<>();
-        for (User u : users) {
-            usersDto.add(UserMapper.toDto(u));
+        return UserMapper.fromListDto(users);
+    }
+
+    @Override
+    @Transactional
+    public UserDto update(Long id,UserDto userDto) {
+        log.trace("обновление пользователия");
+        if (isValidId(id)) {
+            if (userDto.getEmail() != null) {
+                userRepository.updateUserEmail(id,userDto.getEmail());
+            }
+            if (userDto.getName() != null) {
+                userRepository.updateUsername(id,userDto.getName());
+            }
+            return get(id);
         }
-        return usersDto;
+        return null;
     }
 
     @Override
-    public UserDto update(Integer id,UserDto userDto) {
-        User user = userRepository.updateUser(id,userDto.getName(),userDto.getEmail());
-        return UserMapper.toDto(user);
+    @Transactional
+    public void delete(Long id) {
+        log.trace("удаление пользователя");
+        userRepository.deleteById(id);
+    }
+/*
+    private boolean isValidEmail(Integer id,String email) {
+        if ((id != null && emails.containsValue(email) && !emails.get(id).equals(email))
+                || (id == null && emails.containsValue(email))) {
+            throw new ConflictException("другой пользователь с данным email существует");
+        }
+        return true;
+    }
+*/
+    private boolean isValidId(Long id) {
+        if (id == null || id == 0) {
+            throw new ValidationException("пользователь имеет ошибочное id");
+        }
+        else return true;
+        //else return !users.containsKey(id); // если не найден - true; если найден - false
     }
 
-    @Override
-    public void delete(Integer id) {
-        userRepository.deleteById(id.longValue());
-    }
 }
-
