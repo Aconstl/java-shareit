@@ -1,5 +1,8 @@
 package ru.practicum.shareit.item.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public  class ItemMapper {
     public static ItemDto toDto(Item item) {
         return ItemDto.builder()
@@ -12,5 +15,13 @@ public  class ItemMapper {
 
     public static Item fromDto(ItemDto itemDto) {
         return new Item(itemDto.getId(),itemDto.getName(),itemDto.getDescription(),itemDto.getAvailable());
+    }
+
+    public static List<ItemDto> fromListDto(List<Item> items) {
+        List<ItemDto> itemsDto = new ArrayList<>();
+        for (Item i : items) {
+            itemsDto.add(ItemMapper.toDto(i));
+        }
+        return itemsDto;
     }
 }

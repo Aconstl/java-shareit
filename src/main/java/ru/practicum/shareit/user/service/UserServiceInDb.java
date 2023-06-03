@@ -7,12 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserDto;
 import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepositoryInDb;
 
-import javax.transaction.Transactional;
 import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
@@ -80,15 +80,7 @@ public class UserServiceInDb implements UserService {
         log.trace("удаление пользователя");
         userRepository.deleteById(id);
     }
-/*
-    private boolean isValidEmail(Integer id,String email) {
-        if ((id != null && emails.containsValue(email) && !emails.get(id).equals(email))
-                || (id == null && emails.containsValue(email))) {
-            throw new ConflictException("другой пользователь с данным email существует");
-        }
-        return true;
-    }
-*/
+
     private boolean isValidId(Long id) {
         if (id == null || id == 0) {
             throw new ValidationException("пользователь имеет ошибочное id");

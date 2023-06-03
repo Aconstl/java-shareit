@@ -18,6 +18,7 @@ public class Item { //Вещь
 
     @Id
     @Column(name = "item_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;     // id вещи
     @NotBlank
     private String name;    // имя вещи
@@ -25,8 +26,10 @@ public class Item { //Вещь
     private String description;     //описание вещи
     @NotNull
     private Boolean available;  // статус о том, доступна ли вещь для аренды
-    @Transient
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User owner;     // владелец вещи
+    @Transient
     private String request; //ссылка на запрос (если была создана по запросу другого пользователя)
 
     public Item(Long id, String name, String description, Boolean available) {
