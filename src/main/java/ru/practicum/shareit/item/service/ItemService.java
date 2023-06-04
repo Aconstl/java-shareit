@@ -1,19 +1,20 @@
 package ru.practicum.shareit.item.service;
 
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemDto;
 
 import java.util.List;
 
 public interface ItemService {
-    ItemDto create(Long userId, ItemDto itemDto);
+    Item create(Long userId, ItemDto itemDto);
 
-    ItemDto get(Long id);
+    Item get(Long id);
 
-    List<ItemDto> getAllItemUsers(Long userId);
+    List<Item> getAllItemUsers(Long userId);
 
-    List<ItemDto> search(String text);
+    List<Item> search(String text);
 
-    ItemDto update(Long userId, Long itemId, ItemDto itemDto);
+    Item update(Long userId, Long itemId, ItemDto itemDto);
 
     void delete(Long id);
 

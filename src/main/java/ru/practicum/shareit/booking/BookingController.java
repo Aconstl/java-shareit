@@ -2,11 +2,14 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.model.BookingDto;
+
+import ru.practicum.shareit.booking.model.BookingDtoIn;
+import ru.practicum.shareit.booking.model.BookingDtoOut;
+import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.item.model.ItemDto;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,33 +19,32 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public BookingDto newBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                 @Valid @RequestBody BookingDto bookingDto) {
-        return bookingService.create(userId,bookingDto);
+    public BookingDtoOut newBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                    @Valid @RequestBody BookingDtoIn bookingDtoIn) {
+        return BookingMapper.toDto(bookingService.create(userId,bookingDtoIn));
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDto changeStatus(@RequestHeader("X-Sharer-User-Id") Long ownerId,
-                                   @PathVariable Integer bookingId,
-                                   //@RequestBody BookingDto bookingDto,
-                                   @RequestParam(value = "approved") String approved) {
-        throw new UnsupportedOperationException("Метод не реализован");
+    public BookingDtoOut changeStatus(@RequestHeader("X-Sharer-User-Id") Long ownerId,
+                                     @PathVariable Long bookingId,
+                                     @RequestParam(value = "approved") Boolean approved) {
+        return BookingMapper.toDto(bookingService.changeStatus(ownerId,bookingId,approved));
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDto getBooking(@PathVariable Integer bookingId) {
-        throw new UnsupportedOperationException("Метод не реализован");
+    public BookingDtoOut getBooking(@PathVariable Long bookingId) {
+        return BookingMapper.toDto(bookingService.get(bookingId));
     }
 
     @GetMapping
-    public BookingDto getBookingUser(
+    public List<BookingDtoOut> getBookingUser(
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @RequestParam(value = "state", defaultValue = "ALL", required = false) String state) {
-        throw new UnsupportedOperationException("Метод не реализован");
+        return BookingMapper.toDtoList(bookingService.getBookingUser(userId,state));
     }
 
     @GetMapping ("/owner")
-    public BookingDto getBookingOwner(
+    public BookingDtoOut getBookingOwner(
             @RequestHeader("X-Sharer-User-Id") Long ownerId,
             @RequestParam(value = "state", defaultValue = "ALL", required = false) String state) {
         throw new UnsupportedOperationException("Метод не реализован");

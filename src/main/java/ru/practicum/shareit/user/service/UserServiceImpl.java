@@ -1,3 +1,4 @@
+/*
 package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
@@ -52,3 +53,4 @@ public class UserServiceImpl implements UserService {
     }
 
 }
+*/

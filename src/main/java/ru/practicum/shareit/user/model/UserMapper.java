@@ -17,11 +17,17 @@ public class UserMapper {
         return new User(userDto.getId(),userDto.getName(),userDto.getEmail());
     }
 
-    public static List<UserDto> fromListDto(List<User> users) {
+    public static List<UserDto> toListDto(List<User> users) {
     List<UserDto> usersDto = new ArrayList<>();
         for (User u : users) {
         usersDto.add(UserMapper.toDto(u));
     }
         return usersDto;
+    }
+
+    public static UserDtoForBooking toDtoBooking(User user) {
+        return UserDtoForBooking.builder()
+                .id(user.getId())
+                .build();
     }
 }

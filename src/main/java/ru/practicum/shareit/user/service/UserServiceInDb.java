@@ -28,16 +28,15 @@ public class UserServiceInDb implements UserService {
 
     @Override
     @Transactional
-    public UserDto create(UserDto userDto) {
+    public User create(UserDto userDto) {
         log.trace("добавление пользователя");
         User userTo = UserMapper.fromDto(userDto);
-        User user = userRepository.save(userTo);
-            return UserMapper.toDto(user);
+        return userRepository.save(userTo);
     }
 
     @Override
     @Transactional
-    public UserDto get(Long id) {
+    public User get(Long id) {
         log.trace("получение пользователя");
         if (id == null || id == 0) {
             throw new NullPointerException("Id пользователя указан неверно");
@@ -47,20 +46,19 @@ public class UserServiceInDb implements UserService {
             throw new IllegalArgumentException("Пользователь с Id № " + id + " не найден");
         }
         log.debug("Пользователь с id №{} получен", id);
-        return UserMapper.toDto(user.get());
+        return user.get();
     }
 
     @Override
     @Transactional
-    public List<UserDto> getAll() {
+    public List<User> getAll() {
         log.trace("получение всех пользователей");
-        List<User> users = userRepository.findAll();
-        return UserMapper.fromListDto(users);
+        return userRepository.findAll();
     }
 
     @Override
     @Transactional
-    public UserDto update(Long id,UserDto userDto) {
+    public User update(Long id,UserDto userDto) {
         log.trace("обновление пользователия");
         if (isValidId(id)) {
             if (userDto.getEmail() != null) {

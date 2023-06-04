@@ -1,3 +1,4 @@
+/*
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
@@ -68,4 +69,4 @@ public class ItemServiceImpl implements  ItemService {
         itemRepository.delete(id);
     }
 
-}
+}*/

@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.model.ItemDto;
+import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
@@ -18,29 +19,29 @@ public class ItemController {
     @PostMapping
     public ItemDto newItem(@RequestHeader("X-Sharer-User-Id") Long userId,
                         @Valid @RequestBody ItemDto itemDto) {
-        return itemService.create(userId,itemDto);
+        return ItemMapper.toDto(itemService.create(userId,itemDto));
     }
 
     @GetMapping("/{id}")
     public ItemDto getItem(@PathVariable Long id) {
-        return itemService.get(id);
+        return ItemMapper.toDto(itemService.get(id));
     }
 
     @GetMapping
     public List<ItemDto> getAllItemUsers(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemService.getAllItemUsers(userId);
+        return ItemMapper.toListDto(itemService.getAllItemUsers(userId));
     }
 
     @GetMapping("/search")
     public List<ItemDto> searchItem(@RequestParam(value = "text") String text) {
-        return itemService.search(text);
+        return ItemMapper.toListDto(itemService.search(text));
     }
 
     @PatchMapping("/{id}")
     public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Long userId,
                            @PathVariable Long id,
                            @RequestBody ItemDto itemDto) {
-        return itemService.update(userId,id,itemDto);
+        return ItemMapper.toDto(itemService.update(userId,id,itemDto));
     }
 
     @DeleteMapping("/{id}")

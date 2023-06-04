@@ -12,7 +12,6 @@ import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepositoryInDb;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.service.UserServiceInDb;
 
 
@@ -33,19 +32,17 @@ public class ItemServiceInDb implements ItemService {
 
     @Override
     @Transactional (propagation = Propagation.REQUIRES_NEW)
-    public ItemDto create(Long userId, ItemDto itemDto) {
+    public Item create(Long userId, ItemDto itemDto) {
         log.trace("добавление предмета");
-        User user = UserMapper.fromDto(userService.get(userId));
+        User user = userService.get(userId);
         Item item = ItemMapper.fromDto(itemDto);
         item.setOwner(user);
-        Item itemRes = itemRepository.save(item);
-
-        return ItemMapper.toDto(itemRes);
+        return itemRepository.save(item);
     }
 
     @Override
     @Transactional
-    public ItemDto get(Long id) {
+    public Item get(Long id) {
         log.trace("получение предмета");
         if (id == null || id == 0) {
             throw new NullPointerException("Id предмета указан неверно");
@@ -55,26 +52,22 @@ public class ItemServiceInDb implements ItemService {
             throw new IllegalArgumentException("Предмет с Id № " + id + " не найден");
         }
         log.debug("Предмет с id №{} получен", id);
-        return ItemMapper.toDto(item.get());
+        return item.get();
     }
 
     @Override
     @Transactional
-    public List<ItemDto> getAllItemUsers(Long userId) {
+    public List<Item> getAllItemUsers(Long userId) {
         log.trace("вывод всех предметов пользователя");
-        List<Item> items = itemRepository.findItemByOwner(userId);
-       // List<Item> items = itemRepository.getItemsToOwner(userId);
-        return ItemMapper.fromListDto(items);
-
+        return itemRepository.findItemByOwner(userId);
     }
 
     @Override
     @Transactional
-    public List<ItemDto> search(String text) {
+    public List<Item> search(String text) {
         log.trace("поиск предмета по имени");
         if (!text.isBlank()) {
-            List<Item> items = itemRepository.searchItem(text.toLowerCase());
-            return ItemMapper.fromListDto(items);
+            return itemRepository.searchItem(text.toLowerCase());
         } else {
             return new ArrayList<>();
         }
@@ -82,7 +75,7 @@ public class ItemServiceInDb implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
+    public Item update(Long userId, Long itemId, ItemDto itemDto) {
         log.trace("обновление предмета");
         if (itemId == null || itemId == 0) {
             throw new ValidationException("предмет имеет ошибочное id");

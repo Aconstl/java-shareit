@@ -17,11 +17,19 @@ public  class ItemMapper {
         return new Item(itemDto.getId(),itemDto.getName(),itemDto.getDescription(),itemDto.getAvailable());
     }
 
-    public static List<ItemDto> fromListDto(List<Item> items) {
+    public static List<ItemDto> toListDto(List<Item> items) {
         List<ItemDto> itemsDto = new ArrayList<>();
         for (Item i : items) {
             itemsDto.add(ItemMapper.toDto(i));
         }
         return itemsDto;
+    }
+
+    public static ItemDtoForBooking toDtoBooking(Item item) {
+        return ItemDtoForBooking.builder()
+                .id(item.getId())
+                .name(item.getName())
+              //  .ownerId(item.getOwner().getId())
+                .build();
     }
 }
