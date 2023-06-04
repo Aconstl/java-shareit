@@ -1,7 +1,7 @@
 package ru.practicum.shareit.booking.model;
 
 public enum StatusForSearch {
-    All,
+    ALL,
     CURRENT,
     PAST,
     FUTURE,

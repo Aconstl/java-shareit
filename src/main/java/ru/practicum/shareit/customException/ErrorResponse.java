@@ -18,6 +18,4 @@ public class ErrorResponse { //тело кастомного исключени�
         return description;
     }
 
-
-
 }

@@ -32,8 +32,9 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDtoOut getBooking(@PathVariable Long bookingId) {
-        return BookingMapper.toDto(bookingService.get(bookingId));
+    public BookingDtoOut getBooking(@PathVariable Long bookingId,
+                                    @RequestHeader("X-Sharer-User-Id") Long userId) {
+        return BookingMapper.toDto(bookingService.get(bookingId, userId));
     }
 
     @GetMapping
@@ -44,10 +45,10 @@ public class BookingController {
     }
 
     @GetMapping ("/owner")
-    public BookingDtoOut getBookingOwner(
+    public List<BookingDtoOut> getBookingOwner(
             @RequestHeader("X-Sharer-User-Id") Long ownerId,
             @RequestParam(value = "state", defaultValue = "ALL", required = false) String state) {
-        throw new UnsupportedOperationException("Метод не реализован");
+        return BookingMapper.toDtoList(bookingService.getBookingOwner(ownerId,state));
     }
 
 }

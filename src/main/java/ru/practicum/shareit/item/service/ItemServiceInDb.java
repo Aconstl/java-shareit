@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.repository.BookingRepositoryInDb;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.model.ItemMapper;
@@ -29,6 +30,8 @@ public class ItemServiceInDb implements ItemService {
 
     private final ItemRepositoryInDb itemRepository;
     private final UserServiceInDb userService;
+
+    private final BookingRepositoryInDb bookingRepository;
 
     @Override
     @Transactional (propagation = Propagation.REQUIRES_NEW)

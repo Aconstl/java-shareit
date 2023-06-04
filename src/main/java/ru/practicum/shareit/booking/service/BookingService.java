@@ -12,7 +12,7 @@ public interface BookingService {
 
     Booking changeStatus(Long userId, Long bookingId, Boolean approved);
 
-    Booking get(Long id);
+    Booking get(Long bookingId,Long userId);
 
     List<Booking> getBookingUser(Long userId, String state);
 
