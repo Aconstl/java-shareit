@@ -31,7 +31,7 @@ public class UserServiceInDb implements UserService {
     public UserDto create(UserDto userDto) {
         log.trace("добавление пользователя");
         User userTo = UserMapper.fromDto(userDto);
-            User user = userRepository.save(userTo);
+        User user = userRepository.save(userTo);
             return UserMapper.toDto(user);
     }
 

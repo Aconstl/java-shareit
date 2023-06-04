@@ -1,6 +1,8 @@
 package ru.practicum.shareit.booking.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -11,13 +13,22 @@ import java.time.LocalDateTime;
  */
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Booking {
 
-    private int id;
+    private Long id;
     private LocalDateTime start;
     private LocalDateTime end;
     private Item item;
     private User booker;
     private Status status;
 
+
+    public Booking(Item item,User booker, LocalDateTime start, LocalDateTime end) {
+        this.item = item;
+        this.booker = booker;
+        this.start = start;
+        this.end = end;
+    }
 }
