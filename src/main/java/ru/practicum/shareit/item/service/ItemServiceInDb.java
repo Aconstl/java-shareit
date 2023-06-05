@@ -7,9 +7,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepositoryInDb;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemDto;
+import ru.practicum.shareit.item.model.ItemDtoWithBooking;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepositoryInDb;
 import ru.practicum.shareit.user.model.User;
@@ -43,10 +46,7 @@ public class ItemServiceInDb implements ItemService {
         return itemRepository.save(item);
     }
 
-    @Override
-    @Transactional
-    public Item get(Long id) {
-        log.trace("получение предмета");
+    public Item find(Long id) {
         if (id == null || id == 0) {
             throw new NullPointerException("Id предмета указан неверно");
         }
@@ -54,15 +54,29 @@ public class ItemServiceInDb implements ItemService {
         if (item.isEmpty()) {
             throw new IllegalArgumentException("Предмет с Id № " + id + " не найден");
         }
-        log.debug("Предмет с id №{} получен", id);
         return item.get();
     }
 
     @Override
     @Transactional
-    public List<Item> getAllItemUsers(Long userId) {
+    public ItemDtoWithBooking get(Long id,Long userId) {
+        log.trace("получение предмета");
+        Item item = find(id);
+        ItemDtoWithBooking itemFin = addBooking(item,userId);
+        log.debug("Предмет с id №{} получен", id);
+        return itemFin;
+    }
+    @Override
+    @Transactional
+    public List<ItemDtoWithBooking> getAllItemUsers(Long userId) {
         log.trace("вывод всех предметов пользователя");
-        return itemRepository.findItemByOwner(userId);
+        List<Long> listIdItem = itemRepository.findItemByOwner(userId);
+        List<ItemDtoWithBooking> itemsDto = new ArrayList<>();
+        for (Long id : listIdItem) {
+            Item item = find(id);
+            itemsDto.add(addBooking(item,userId));
+        }
+        return itemsDto;
     }
 
     @Override
@@ -101,7 +115,7 @@ public class ItemServiceInDb implements ItemService {
                 }
             }
         }
-        return get(itemId);
+        return find(itemId);
     }
 
     @Override
@@ -110,4 +124,22 @@ public class ItemServiceInDb implements ItemService {
         log.trace("удаление предмета");
         itemRepository.deleteById(id);
     }
+
+    private ItemDtoWithBooking addBooking (Item item,Long userId) {
+        Booking lastBooking = null;
+        Booking nextBooking = null;
+
+        if (userId.equals(item.getOwner().getId())) {
+            lastBooking = bookingRepository.getLastBooking(item.getId());
+            if (lastBooking == null || lastBooking.getBooker().getId().equals(item.getOwner().getId())) {
+                lastBooking = null;
+            } else {
+                nextBooking = bookingRepository.getNextBooking(item.getId(), lastBooking.getEnd());
+            }
+        }
+        return ItemMapper.toDtoWithBooking(item,
+                BookingMapper.toDtoForItem(lastBooking),
+                BookingMapper.toDtoForItem(nextBooking));
+    }
+
 }

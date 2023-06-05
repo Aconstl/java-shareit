@@ -40,7 +40,7 @@ public class BookingServiceInDb implements  BookingService {
             throw new ValidationException("время бронирования указано некорректно");
         }
         User user = userService.get(userId);
-        Item item = itemService.get(bookingDtoIn.getItemId());
+        Item item = itemService.find(bookingDtoIn.getItemId());
         if (item.getOwner().getId().equals(user.getId())) {
             throw new IllegalArgumentException("Пользователь предмета не может бронировать собственный предмет");
         }
@@ -114,9 +114,9 @@ public class BookingServiceInDb implements  BookingService {
             case FUTURE:
                 return bookingRepository.findBookingUserFuture(userId,LocalDateTime.now());
             case WAITING:
-                return bookingRepository.findAllByBookerIdAndStatusOrderByIdDesc(userId,state.toString());
+                return bookingRepository.findBookingUserStatusWaiting(userId);
             case REJECTED:
-                return bookingRepository.findAllByBookerIdAndStatusOrderByIdDesc(userId,state.toString());
+                return bookingRepository.findBookingUserStatusRejected(userId);
             default:
                 throw new NullPointerException("Статус бронирования не поддерживается");
         }
@@ -142,9 +142,9 @@ public class BookingServiceInDb implements  BookingService {
                 case FUTURE:
                     return bookingRepository.findBookingOwnerFuture(ownerId,LocalDateTime.now());
                 case WAITING:
-                    return bookingRepository.findBookingOwnerStatus(ownerId,state.toString());
+                    return bookingRepository.findBookingOwnerStatusWaiting(ownerId);
                 case REJECTED:
-                    return bookingRepository.findBookingOwnerStatus(ownerId,state.toString());
+                    return bookingRepository.findBookingOwnerStatusRejected(ownerId);
                 default:
                     throw new NullPointerException("Статус бронирования не поддерживается");
             }

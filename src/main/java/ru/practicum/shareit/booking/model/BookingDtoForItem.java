@@ -8,5 +8,5 @@ import lombok.Data;
 public class BookingDtoForItem {
 
     Long id;
-    Long booker_id;
+    Long bookerId;
 }

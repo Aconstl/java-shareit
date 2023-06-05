@@ -28,7 +28,6 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "From bookings " +
             "Where booker_id = :id " +
             "AND start_date > :now " +
-          //  "and not status like '%APPROVED%'" +
             "order by booking_id desc", nativeQuery = true)
     List<Booking> findBookingUserFuture(@Param("id") Long id,
                                          @Param("now") LocalDateTime now);
@@ -41,6 +40,19 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
     List<Booking> findBookingUserPast(@Param("id") Long id,
                                       @Param("now") LocalDateTime now);
 
+    @Query(value = "select b.* " +
+            "From bookings b " +
+            "Where booker_id = :id " +
+            "AND b.status like 'WAITING' " +
+            "order by booking_id desc", nativeQuery = true)
+    List<Booking> findBookingUserStatusWaiting(@Param("id") Long id);
+
+    @Query(value = "select b.* " +
+            "From bookings b " +
+            "Where booker_id = :id " +
+            "AND b.status like 'REJECTED' " +
+            "order by booking_id desc", nativeQuery = true)
+    List<Booking> findBookingUserStatusRejected(@Param("id") Long id);
 
     @Query(value = "select b.* " +
             "From bookings b " +
@@ -63,7 +75,6 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
             "AND start_date > :now " +
-            //  "and not status like '%APPROVED%' " +
             "order by booking_id desc", nativeQuery = true)
     List<Booking> findBookingOwnerFuture(@Param("id") Long id,
                                          @Param("now") LocalDateTime now);
@@ -81,10 +92,17 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "From bookings b " +
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
-            "AND b.status = :status" +
+            "AND b.status like 'WAITING' " +
             "order by booking_id desc", nativeQuery = true)
-    List<Booking> findBookingOwnerStatus(@Param("id") Long id,
-                                         @Param("status") String status);
+    List<Booking> findBookingOwnerStatusWaiting(@Param("id") Long id);
+
+    @Query(value = "select b.* " +
+            "From bookings b " +
+            "left join items i on i.item_id = b.item_id " +
+            "Where i.user_id = :id " +
+            "AND b.status like 'REJECTED' " +
+            "order by booking_id desc", nativeQuery = true)
+    List<Booking> findBookingOwnerStatusRejected(@Param("id") Long id);
 
     @Modifying
     @Query(value = "UPDATE PUBLIC.BOOKINGS " +
@@ -108,4 +126,20 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "From bookings b " +
             "Where b.booking_id = :booking_id", nativeQuery = true)
     Status getStatusBooker(@Param("booking_id") Long id);
+
+    @Query (value = "select * " +
+            "From bookings " +
+            "Where item_id  = :idItem " +
+            "AND end_date < now() " +
+            "limit 1" , nativeQuery = true)
+    Booking getLastBooking(@Param("idItem") Long id);
+
+    @Query (value = "select * " +
+            "From bookings " +
+            "Where item_id  = :idItem " +
+            "AND start_date > :time " +
+            "order by start_date asc " +
+            "limit 1" , nativeQuery = true)
+    Booking getNextBooking(@Param("idItem") Long id,
+                           @Param("time") LocalDateTime time);
 }

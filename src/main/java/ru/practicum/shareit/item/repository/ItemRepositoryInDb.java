@@ -10,11 +10,12 @@ import java.util.List;
 
 public interface ItemRepositoryInDb extends JpaRepository<Item,Long> {
 
-    @Query (value = "select * " +
+    @Query (value = "select item_id " +
             "from public.items " +
-            "where user_id = :id "
+            "where user_id = :id " +
+            "order by item_id asc"
             , nativeQuery = true)
-    List<Item> findItemByOwner(@Param("id") Long id);
+    List<Long> findItemByOwner(@Param("id") Long id);
 
     @Query (value = "select * " +
             "from public.items " +

@@ -32,4 +32,15 @@ public class BookingMapper {
         }
         return bookingsDtoOut;
     }
+
+    public static BookingDtoForItem toDtoForItem(Booking booking) {
+        if (booking != null) {
+            return BookingDtoForItem.builder()
+                    .id(booking.getId())
+                    .bookerId(booking.getBooker().getId())
+                    .build();
+        } else {
+            return null;
+        }
+    }
 }
