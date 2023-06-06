@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS PUBLIC.ITEMS
     AVAILABLE BOOLEAN NOT NULL,
     user_id BIGINT not null,
     CONSTRAINT pk_item PRIMARY KEY (item_id),
-    CONSTRAINT OWNER_FK FOREIGN KEY (user_id) REFERENCES Public.USERS(user_id)
+    CONSTRAINT ownerInBooking_FK FOREIGN KEY (user_id) REFERENCES Public.USERS(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS PUBLIC.BOOKINGS
@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS PUBLIC.BOOKINGS
     booker_id BIGINT not null,
     status VARCHAR(15) not null,
     constraint pk_booking primary key (booking_id),
-    CONSTRAINT item_FK FOREIGN KEY (item_id) REFERENCES Public.ITEMS(item_id),
-    CONSTRAINT booker_FK FOREIGN KEY (booker_id) REFERENCES Public.Users(user_id)
+    CONSTRAINT itemInBooking_FK FOREIGN KEY (item_id) REFERENCES Public.ITEMS(item_id),
+    CONSTRAINT bookerInBooking_FK FOREIGN KEY (booker_id) REFERENCES Public.Users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS PUBLIC.COMMENTS
@@ -39,6 +39,6 @@ CREATE TABLE IF NOT EXISTS PUBLIC.COMMENTS
     user_id BIGINT not null,
     created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     constraint pk_comment primary key (comment_id),
-    CONSTRAINT item_FK FOREIGN KEY (item_id) REFERENCES Public.ITEMS(item_id),
-    CONSTRAINT user_FK FOREIGN KEY (user_id) REFERENCES Public.Users(user_id)
+    CONSTRAINT itemInComment_FK FOREIGN KEY (item_id) REFERENCES Public.ITEMS(item_id),
+    CONSTRAINT userInComment_FK FOREIGN KEY (user_id) REFERENCES Public.Users(user_id)
 );

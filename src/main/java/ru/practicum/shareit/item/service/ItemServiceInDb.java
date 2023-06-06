@@ -142,7 +142,6 @@ public class ItemServiceInDb implements ItemService {
         if (item == null) {
             throw new ValidationException("Данный пользователь не бронировал предмет");
         }
-        //Item item = find(itemId);
         User user = userService.get(userId);
         Comment comment = CommentMapper.fromDto(commentDtoIn,item,user, LocalDateTime.now());
         return commentRepository.save(comment);

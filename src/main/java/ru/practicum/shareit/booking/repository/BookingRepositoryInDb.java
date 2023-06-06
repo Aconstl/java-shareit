@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.repository;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,95 +13,83 @@ import java.util.List;
 public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
     List<Booking> findAllByBookerIdOrderByIdDesc(Long id);
 
-    List<Booking> findAllByBookerIdAndStatusOrderByIdDesc(Long id,String status);
+    @Query(value = "select * " +
+            "From bookings " +
+            "Where booker_id = :id " +
+            "AND start_date < now() AND end_date > now() " +
+            "order by end_date desc", nativeQuery = true)
+    List<Booking> findBookingUserCurrent(@Param("id") Long id);
 
     @Query(value = "select * " +
             "From bookings " +
             "Where booker_id = :id " +
-            "AND start_date < :now AND end_date > :now " +
-            "order by end_date desc", nativeQuery = true) //END_DATE????
-    List<Booking> findBookingUserCurrent(@Param("id") Long id,
-                                        @Param("now") LocalDateTime now);
+            "AND start_date > now() " +
+            "order by end_date desc"
+            , nativeQuery = true)
+    List<Booking> findBookingUserFuture(@Param("id") Long id);
 
     @Query(value = "select * " +
             "From bookings " +
             "Where booker_id = :id " +
-            "AND start_date > :now " +
-            "order by booking_id desc", nativeQuery = true)
-    List<Booking> findBookingUserFuture(@Param("id") Long id,
-                                         @Param("now") LocalDateTime now);
-
-    @Query(value = "select * " +
-            "From bookings " +
-            "Where booker_id = :id " +
-            "AND end_date < :now " +
-            "order by booking_id desc", nativeQuery = true)
-    List<Booking> findBookingUserPast(@Param("id") Long id,
-                                      @Param("now") LocalDateTime now);
+            "AND end_date < now() " +
+            "order by end_date desc"
+            , nativeQuery = true)
+    List<Booking> findBookingUserPast(@Param("id") Long id);
 
     @Query(value = "select b.* " +
             "From bookings b " +
             "Where booker_id = :id " +
-            "AND b.status like 'WAITING' " +
-            "order by booking_id desc", nativeQuery = true)
-    List<Booking> findBookingUserStatusWaiting(@Param("id") Long id);
-
-    @Query(value = "select b.* " +
-            "From bookings b " +
-            "Where booker_id = :id " +
-            "AND b.status like 'REJECTED' " +
-            "order by booking_id desc", nativeQuery = true)
-    List<Booking> findBookingUserStatusRejected(@Param("id") Long id);
+            "AND b.status like :status " +
+            "order by end_date desc"
+            , nativeQuery = true)
+    List<Booking> findBookingUserStatus(@Param("id") Long id,
+                                        @Param("status") String status);
 
     @Query(value = "select b.* " +
             "From bookings b " +
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
-            "order by booking_id desc", nativeQuery = true)
+            "order by end_date desc"
+            , nativeQuery = true)
     List<Booking> findBookingOwnerAll(@Param("id") Long id);
 
     @Query(value = "select b.* " +
             "From bookings b " +
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
-            "AND start_date < :now AND end_date > :now " +
-            "order by booking_id desc", nativeQuery = true)
-    List<Booking> findBookingOwnerCurrent(@Param("id") Long id,
-                                          @Param("now") LocalDateTime now);
+            "AND start_date < now() AND end_date > now() " +
+            "order by end_date desc"
+            , nativeQuery = true)
+    List<Booking> findBookingOwnerCurrent(@Param("id") Long id);
 
     @Query(value = "select b.* " +
             "From bookings b " +
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
-            "AND start_date > :now " +
-            "order by booking_id desc", nativeQuery = true)
-    List<Booking> findBookingOwnerFuture(@Param("id") Long id,
-                                         @Param("now") LocalDateTime now);
+            "AND start_date > now() " +
+            "order by end_date desc"
+            , nativeQuery = true)
+    List<Booking> findBookingOwnerFuture(@Param("id") Long id);
 
     @Query(value = "select b.* " +
             "From bookings b " +
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
-            "AND end_date < :now " +
-            "order by booking_id desc", nativeQuery = true)
-    List<Booking> findBookingOwnerPast(@Param("id") Long id,
-                                       @Param("now") LocalDateTime now);
+            "AND end_date < now() " +
+            "order by end_date desc"
+            , nativeQuery = true)
+    List<Booking> findBookingOwnerPast(@Param("id") Long id);
+
 
     @Query(value = "select b.* " +
             "From bookings b " +
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
-            "AND b.status like 'WAITING' " +
-            "order by booking_id desc", nativeQuery = true)
-    List<Booking> findBookingOwnerStatusWaiting(@Param("id") Long id);
-
-    @Query(value = "select b.* " +
-            "From bookings b " +
-            "left join items i on i.item_id = b.item_id " +
-            "Where i.user_id = :id " +
-            "AND b.status like 'REJECTED' " +
-            "order by booking_id desc", nativeQuery = true)
-    List<Booking> findBookingOwnerStatusRejected(@Param("id") Long id);
+            "AND b.status like :status " +
+            "order by end_date desc"
+            , nativeQuery = true)
+    List<Booking> findBookingOwnerStatus(@Param("id") Long id,
+                                                 @Param("status") String status);
 
     @Modifying
     @Query(value = "UPDATE PUBLIC.BOOKINGS " +

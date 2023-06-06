@@ -15,7 +15,6 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserServiceInDb;
 
 import javax.validation.ValidationException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,24 +100,20 @@ public class BookingServiceInDb implements  BookingService {
     @Transactional
     public List<Booking> getBookingUser(Long userId, String state){
         log.trace("Получение бронирования пользователя");
-        User user = userService.get(userId);
+        userService.get(userId);
         try {
             StatusForSearch status = StatusForSearch.valueOf(state);
         switch (status) {
             case ALL:
                 return bookingRepository.findAllByBookerIdOrderByIdDesc(userId);
             case CURRENT:
-                return bookingRepository.findBookingUserCurrent(userId,LocalDateTime.now());
+                return bookingRepository.findBookingUserCurrent(userId);
             case PAST:
-                return bookingRepository.findBookingUserPast(userId,LocalDateTime.now());
+                return bookingRepository.findBookingUserPast(userId);
             case FUTURE:
-                return bookingRepository.findBookingUserFuture(userId,LocalDateTime.now());
-            case WAITING:
-                return bookingRepository.findBookingUserStatusWaiting(userId);
-            case REJECTED:
-                return bookingRepository.findBookingUserStatusRejected(userId);
+                return bookingRepository.findBookingUserFuture(userId);
             default:
-                throw new NullPointerException("Статус бронирования не поддерживается");
+                return bookingRepository.findBookingUserStatus(userId,status.toString());
         }
         } catch (Exception e) {
             throw new UnsopportedStatus("Unknown state: UNSUPPORTED_STATUS");
@@ -129,24 +124,20 @@ public class BookingServiceInDb implements  BookingService {
     @Transactional
      public List<Booking> getBookingOwner(Long ownerId, String state){
         log.trace("Получение бронирования владельца");
-        User user = userService.get(ownerId);
+        userService.get(ownerId);
         try {
             StatusForSearch status = StatusForSearch.valueOf(state);
             switch (status) {
                 case ALL:
                     return bookingRepository.findBookingOwnerAll(ownerId);
                 case CURRENT:
-                    return bookingRepository.findBookingOwnerCurrent(ownerId,LocalDateTime.now());
+                    return bookingRepository.findBookingOwnerCurrent(ownerId);
                 case PAST:
-                    return bookingRepository.findBookingOwnerPast(ownerId,LocalDateTime.now());
+                    return bookingRepository.findBookingOwnerPast(ownerId);
                 case FUTURE:
-                    return bookingRepository.findBookingOwnerFuture(ownerId,LocalDateTime.now());
-                case WAITING:
-                    return bookingRepository.findBookingOwnerStatusWaiting(ownerId);
-                case REJECTED:
-                    return bookingRepository.findBookingOwnerStatusRejected(ownerId);
+                    return bookingRepository.findBookingOwnerFuture(ownerId);
                 default:
-                    throw new NullPointerException("Статус бронирования не поддерживается");
+                    return bookingRepository.findBookingOwnerStatus(ownerId,status.toString());
             }
         } catch (Exception e) {
             throw new UnsopportedStatus("Unknown state: UNSUPPORTED_STATUS");

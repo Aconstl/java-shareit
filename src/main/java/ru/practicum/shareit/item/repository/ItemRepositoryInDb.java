@@ -13,8 +13,7 @@ public interface ItemRepositoryInDb extends JpaRepository<Item,Long> {
     @Query (value = "select item_id " +
             "from public.items " +
             "where user_id = :id " +
-            "order by item_id asc"
-            , nativeQuery = true)
+            "order by item_id asc", nativeQuery = true)
     List<Long> findItemByOwner(@Param("id") Long id);
 
     @Query (value = "select * " +
