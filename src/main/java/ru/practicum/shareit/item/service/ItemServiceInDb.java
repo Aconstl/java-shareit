@@ -74,6 +74,7 @@ public class ItemServiceInDb implements ItemService {
         log.debug("Предмет с id №{} получен", id);
         return itemFin;
     }
+
     @Override
     @Transactional
     public List<ItemDtoWithBooking> getAllItemUsers(Long userId) {
@@ -107,8 +108,7 @@ public class ItemServiceInDb implements ItemService {
         } else {
             if (!itemRepository.getOwnerId(itemId).equals(userId)) {
                 throw new IllegalArgumentException("пользователь не является собственником указанного предмета");
-           } else
-            {
+           } else {
                 String name = itemDto.getName();
                 String description = itemDto.getDescription();
                 Boolean available = itemDto.getAvailable();
@@ -147,7 +147,7 @@ public class ItemServiceInDb implements ItemService {
         return commentRepository.save(comment);
     }
 
-    private ItemDtoWithBooking addBookingAndComment (Item item,Long userId) {
+    private ItemDtoWithBooking addBookingAndComment(Item item,Long userId) {
         Booking lastBooking = null;
         Booking nextBooking = null;
 
@@ -159,7 +159,7 @@ public class ItemServiceInDb implements ItemService {
                 nextBooking = bookingRepository.getNextBooking(item.getId(), lastBooking.getEnd());
             }
         }
-        List <CommentDtoOut> comments = CommentMapper.toListDto(commentRepository.findAllByItemId(item.getId()));
+        List<CommentDtoOut> comments = CommentMapper.toListDto(commentRepository.findAllByItemId(item.getId()));
         return ItemMapper.toDtoWithBooking(item,
                 BookingMapper.toDtoForItem(lastBooking),
                 BookingMapper.toDtoForItem(nextBooking),

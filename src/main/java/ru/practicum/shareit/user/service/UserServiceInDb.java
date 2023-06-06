@@ -82,8 +82,7 @@ public class UserServiceInDb implements UserService {
     private boolean isValidId(Long id) {
         if (id == null || id == 0) {
             throw new ValidationException("пользователь имеет ошибочное id");
-        }
-        else return true;
+        } else return true;
         //else return !users.containsKey(id); // если не найден - true; если найден - false
     }
 

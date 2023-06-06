@@ -16,7 +16,7 @@ public  class ItemMapper {
                 .build();
     }
 
-    public static ItemDtoWithBooking toDtoWithBooking(Item item , BookingDtoForItem lastBooking,
+    public static ItemDtoWithBooking toDtoWithBooking(Item item, BookingDtoForItem lastBooking,
                                                       BookingDtoForItem nextBooking, List<CommentDtoOut> comments) {
         return ItemDtoWithBooking.builder()
                 .id(item.getId())

@@ -24,24 +24,21 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "From bookings " +
             "Where booker_id = :id " +
             "AND start_date > now() " +
-            "order by end_date desc"
-            , nativeQuery = true)
+            "order by end_date desc", nativeQuery = true)
     List<Booking> findBookingUserFuture(@Param("id") Long id);
 
     @Query(value = "select * " +
             "From bookings " +
             "Where booker_id = :id " +
             "AND end_date < now() " +
-            "order by end_date desc"
-            , nativeQuery = true)
+            "order by end_date desc", nativeQuery = true)
     List<Booking> findBookingUserPast(@Param("id") Long id);
 
     @Query(value = "select b.* " +
             "From bookings b " +
             "Where booker_id = :id " +
             "AND b.status like :status " +
-            "order by end_date desc"
-            , nativeQuery = true)
+            "order by end_date desc", nativeQuery = true)
     List<Booking> findBookingUserStatus(@Param("id") Long id,
                                         @Param("status") String status);
 
@@ -49,8 +46,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "From bookings b " +
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
-            "order by end_date desc"
-            , nativeQuery = true)
+            "order by end_date desc", nativeQuery = true)
     List<Booking> findBookingOwnerAll(@Param("id") Long id);
 
     @Query(value = "select b.* " +
@@ -58,8 +54,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
             "AND start_date < now() AND end_date > now() " +
-            "order by end_date desc"
-            , nativeQuery = true)
+            "order by end_date desc", nativeQuery = true)
     List<Booking> findBookingOwnerCurrent(@Param("id") Long id);
 
     @Query(value = "select b.* " +
@@ -67,8 +62,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
             "AND start_date > now() " +
-            "order by end_date desc"
-            , nativeQuery = true)
+            "order by end_date desc", nativeQuery = true)
     List<Booking> findBookingOwnerFuture(@Param("id") Long id);
 
     @Query(value = "select b.* " +
@@ -76,8 +70,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
             "AND end_date < now() " +
-            "order by end_date desc"
-            , nativeQuery = true)
+            "order by end_date desc", nativeQuery = true)
     List<Booking> findBookingOwnerPast(@Param("id") Long id);
 
 
@@ -86,8 +79,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
             "AND b.status like :status " +
-            "order by end_date desc"
-            , nativeQuery = true)
+            "order by end_date desc", nativeQuery = true)
     List<Booking> findBookingOwnerStatus(@Param("id") Long id,
                                                  @Param("status") String status);
 
@@ -119,7 +111,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "Where item_id  = :idItem " +
             "AND start_date < now() " +
             "order by end_date desc " +
-            "limit 1" , nativeQuery = true)
+            "limit 1", nativeQuery = true)
     Booking getLastBooking(@Param("idItem") Long id);
 
     @Query (value = "select * " +
@@ -127,7 +119,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "Where item_id  = :idItem " +
             "AND start_date > :time " +
             "order by start_date asc " +
-            "limit 1" , nativeQuery = true)
+            "limit 1", nativeQuery = true)
     Booking getNextBooking(@Param("idItem") Long id,
                            @Param("time") LocalDateTime time);
 

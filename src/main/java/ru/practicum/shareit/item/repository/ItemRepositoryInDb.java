@@ -19,8 +19,7 @@ public interface ItemRepositoryInDb extends JpaRepository<Item,Long> {
     @Query (value = "select * " +
             "from public.items " +
             "where available = true AND " +
-            "( LOWER(name) LIKE %?1% OR LOWER(description) LIKE %?1% ) "
-            , nativeQuery = true)
+            "( LOWER(name) LIKE %?1% OR LOWER(description) LIKE %?1% ) ", nativeQuery = true)
     List<Item> searchItem(String text);
 
     @Query (value = "select user_id " +

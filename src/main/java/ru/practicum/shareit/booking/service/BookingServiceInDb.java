@@ -93,12 +93,12 @@ public class BookingServiceInDb implements  BookingService {
         if (userId.equals(idUser) || userId.equals(idOwner)) {
             return findBooking(bookingId);
         }
-        throw new IllegalArgumentException ("Пользователь не является автором запроса или хозяйном предмета");
+        throw new IllegalArgumentException("Пользователь не является автором запроса или хозяйном предмета");
     }
 
     @Override
     @Transactional
-    public List<Booking> getBookingUser(Long userId, String state){
+    public List<Booking> getBookingUser(Long userId, String state) {
         log.trace("Получение бронирования пользователя");
         userService.get(userId);
         try {
@@ -122,7 +122,7 @@ public class BookingServiceInDb implements  BookingService {
 
     @Override
     @Transactional
-     public List<Booking> getBookingOwner(Long ownerId, String state){
+     public List<Booking> getBookingOwner(Long ownerId, String state) {
         log.trace("Получение бронирования владельца");
         userService.get(ownerId);
         try {
