@@ -10,6 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepositoryInDb;
+import ru.practicum.shareit.item.comment.model.Comment;
+import ru.practicum.shareit.item.comment.model.CommentDtoIn;
+import ru.practicum.shareit.item.comment.model.CommentDtoOut;
+import ru.practicum.shareit.item.comment.model.CommentMapper;
+import ru.practicum.shareit.item.comment.repository.CommentRepositoryInDb;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.model.ItemDtoWithBooking;
@@ -20,6 +25,7 @@ import ru.practicum.shareit.user.service.UserServiceInDb;
 
 
 import javax.validation.ValidationException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +41,7 @@ public class ItemServiceInDb implements ItemService {
     private final UserServiceInDb userService;
 
     private final BookingRepositoryInDb bookingRepository;
+    private final CommentRepositoryInDb commentRepository;
 
     @Override
     @Transactional (propagation = Propagation.REQUIRES_NEW)
@@ -62,7 +69,8 @@ public class ItemServiceInDb implements ItemService {
     public ItemDtoWithBooking get(Long id,Long userId) {
         log.trace("получение предмета");
         Item item = find(id);
-        ItemDtoWithBooking itemFin = addBooking(item,userId);
+        ItemDtoWithBooking itemFin = addBookingAndComment(item,userId);
+
         log.debug("Предмет с id №{} получен", id);
         return itemFin;
     }
@@ -74,7 +82,7 @@ public class ItemServiceInDb implements ItemService {
         List<ItemDtoWithBooking> itemsDto = new ArrayList<>();
         for (Long id : listIdItem) {
             Item item = find(id);
-            itemsDto.add(addBooking(item,userId));
+            itemsDto.add(addBookingAndComment(item,userId));
         }
         return itemsDto;
     }
@@ -125,7 +133,22 @@ public class ItemServiceInDb implements ItemService {
         itemRepository.deleteById(id);
     }
 
-    private ItemDtoWithBooking addBooking (Item item,Long userId) {
+    @Override
+    @Transactional
+    public Comment postComment(Long userId, Long itemId, CommentDtoIn commentDtoIn) {
+        log.trace("Добавление комментария к предмету");
+        //бронировал ли пользователь предмет чтобы оставлять отзыв?
+        Item item = itemRepository.findBookingUser(userId,itemId);
+        if (item == null) {
+            throw new ValidationException("Данный пользователь не бронировал предмет");
+        }
+        //Item item = find(itemId);
+        User user = userService.get(userId);
+        Comment comment = CommentMapper.fromDto(commentDtoIn,item,user, LocalDateTime.now());
+        return commentRepository.save(comment);
+    }
+
+    private ItemDtoWithBooking addBookingAndComment (Item item,Long userId) {
         Booking lastBooking = null;
         Booking nextBooking = null;
 
@@ -137,9 +160,11 @@ public class ItemServiceInDb implements ItemService {
                 nextBooking = bookingRepository.getNextBooking(item.getId(), lastBooking.getEnd());
             }
         }
+        List <CommentDtoOut> comments = CommentMapper.toListDto(commentRepository.findAllByItemId(item.getId()));
         return ItemMapper.toDtoWithBooking(item,
                 BookingMapper.toDtoForItem(lastBooking),
-                BookingMapper.toDtoForItem(nextBooking));
+                BookingMapper.toDtoForItem(nextBooking),
+                comments);
     }
 
 }

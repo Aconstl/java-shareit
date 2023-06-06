@@ -20,7 +20,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "From bookings " +
             "Where booker_id = :id " +
             "AND start_date < :now AND end_date > :now " +
-            "order by booking_id desc", nativeQuery = true)
+            "order by end_date desc", nativeQuery = true) //END_DATE????
     List<Booking> findBookingUserCurrent(@Param("id") Long id,
                                         @Param("now") LocalDateTime now);
 
@@ -130,7 +130,8 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
     @Query (value = "select * " +
             "From bookings " +
             "Where item_id  = :idItem " +
-            "AND end_date < now() " +
+            "AND start_date < now() " +
+            "order by end_date desc " +
             "limit 1" , nativeQuery = true)
     Booking getLastBooking(@Param("idItem") Long id);
 
@@ -142,4 +143,6 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "limit 1" , nativeQuery = true)
     Booking getNextBooking(@Param("idItem") Long id,
                            @Param("time") LocalDateTime time);
+
+
 }

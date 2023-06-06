@@ -3,9 +3,11 @@ package ru.practicum.shareit.item.model;
 import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.booking.model.BookingDtoForItem;
+import ru.practicum.shareit.item.comment.model.CommentDtoOut;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
@@ -21,5 +23,7 @@ public class ItemDtoWithBooking {
 
     BookingDtoForItem lastBooking;
     BookingDtoForItem nextBooking;
+
+    List<CommentDtoOut> comments;
 
 }

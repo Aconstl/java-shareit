@@ -52,4 +52,14 @@ public interface ItemRepositoryInDb extends JpaRepository<Item,Long> {
     void updateAvailable(@Param("item_id") Long id,
                          @Param("available") Boolean available
                         );
+
+    @Query(value = "select distinct i.* " +
+            "From bookings b " +
+            "left join items i on i.item_id = b.item_id " +
+            "Where b.booker_id = :userId " +
+            "AND i.item_id = :itemId " +
+            "and b.end_date < now() " +
+            "AND not b.status = 'REJECTED' ", nativeQuery = true)
+    Item findBookingUser(@Param("userId") Long userId,
+                         @Param("itemId") Long itemId);
 }
