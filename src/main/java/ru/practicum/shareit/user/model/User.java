@@ -21,6 +21,7 @@ public class User {
     private String name;    // имя или логин пользователя
     @NotBlank
     @Email
+    @Column(unique = true)
     private String email;   // адрес эл.почты (УНИКАЛЬНЫЙ)
 
     public User(Long id, String name, String email) {
