@@ -8,5 +8,5 @@ import javax.validation.constraints.Size;
 public class CommentDtoIn {
 
     @Size(max = 500)
-    String text;
+    private String text;
 }

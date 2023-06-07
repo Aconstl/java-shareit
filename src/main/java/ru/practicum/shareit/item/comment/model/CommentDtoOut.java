@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 @Builder
 public class CommentDtoOut {
 
-    Long id;
+    private Long id;
 
-    String text;
+    private String text;
 
-    String authorName;
+    private String authorName;
 
-    LocalDateTime created;
+    private LocalDateTime created;
 
 }

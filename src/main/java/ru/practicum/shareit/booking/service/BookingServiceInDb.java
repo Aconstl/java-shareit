@@ -85,7 +85,6 @@ public class BookingServiceInDb implements  BookingService {
     }
 
     @Override
-    @Transactional
     public Booking get(Long bookingId, Long userId) {
         log.trace("получение данных бронирования");
         Long idOwner = bookingRepository.getIdOwnerItem(bookingId);
@@ -97,7 +96,6 @@ public class BookingServiceInDb implements  BookingService {
     }
 
     @Override
-    @Transactional
     public List<Booking> getBookingUser(Long userId, String state) {
         log.trace("Получение бронирования пользователя");
         userService.get(userId);
@@ -121,7 +119,6 @@ public class BookingServiceInDb implements  BookingService {
     }
 
     @Override
-    @Transactional
      public List<Booking> getBookingOwner(Long ownerId, String state) {
         log.trace("Получение бронирования владельца");
         userService.get(ownerId);

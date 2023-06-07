@@ -1,16 +1,18 @@
 package ru.practicum.shareit.user.model;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@Data
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
+@Getter @Setter
 public class User {
 
     @Id

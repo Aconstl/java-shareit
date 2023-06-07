@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.model;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.user.model.User;
@@ -8,6 +9,7 @@ import ru.practicum.shareit.user.model.UserMapper;
 import java.util.ArrayList;
 import java.util.List;
 
+@UtilityClass
 public class BookingMapper {
 
     public static Booking fromDto(Item item, User user, BookingDtoIn bookingDtoIn, Status status) {

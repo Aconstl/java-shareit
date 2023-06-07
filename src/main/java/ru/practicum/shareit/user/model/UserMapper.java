@@ -1,8 +1,11 @@
 package ru.practicum.shareit.user.model;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@UtilityClass
 public class UserMapper {
 
     public static UserDto toDto(User user) {

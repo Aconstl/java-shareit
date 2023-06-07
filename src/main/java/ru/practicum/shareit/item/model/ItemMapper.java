@@ -1,11 +1,13 @@
 package ru.practicum.shareit.item.model;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.model.BookingDtoForItem;
 import ru.practicum.shareit.item.comment.model.CommentDtoOut;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@UtilityClass
 public  class ItemMapper {
     public static ItemDto toDto(Item item) {
         return ItemDto.builder()

@@ -21,9 +21,9 @@ public class ItemDtoWithBooking {
     @NotNull
     private Boolean available;  // статус о том, доступна ли вещь для аренды
 
-    BookingDtoForItem lastBooking;
-    BookingDtoForItem nextBooking;
+    private BookingDtoForItem lastBooking;
+    private BookingDtoForItem nextBooking;
 
-    List<CommentDtoOut> comments;
+    private List<CommentDtoOut> comments;
 
 }

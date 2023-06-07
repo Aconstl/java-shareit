@@ -35,7 +35,6 @@ public class UserServiceInDb implements UserService {
     }
 
     @Override
-    @Transactional
     public User get(Long id) {
         log.trace("получение пользователя");
         if (id == null || id == 0) {
@@ -50,7 +49,6 @@ public class UserServiceInDb implements UserService {
     }
 
     @Override
-    @Transactional
     public List<User> getAll() {
         log.trace("получение всех пользователей");
         return userRepository.findAll();
