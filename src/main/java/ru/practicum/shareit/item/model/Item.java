@@ -11,7 +11,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Entity
 @Table(name = "items")
-@Getter @Setter
+@Getter
+@Setter
 public class Item { //Вещь
 
     @Id

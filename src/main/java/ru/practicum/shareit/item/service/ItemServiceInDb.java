@@ -69,28 +69,14 @@ public class ItemServiceInDb implements ItemService {
         log.trace("получение предмета");
         Item item = find(id);
         ItemDtoWithBooking itemFin = addBookingAndComment(item,userId);
-
         log.debug("Предмет с id №{} получен", id);
         return itemFin;
     }
 
-/* ПЕРВОНАЧАЛЬНАЯ ВЕРСИЯ
     @Override
     public List<ItemDtoWithBooking> getAllItemUsers(Long userId) {
         log.trace("вывод всех предметов пользователя");
         List<Long> listIdItem = itemRepository.findItemByOwner(userId);
-        List<ItemDtoWithBooking> itemsDto = new ArrayList<>();
-        for (Long id : listIdItem) {
-            Item item = find(id);
-            itemsDto.add(addBookingAndComment(item,userId));
-        }
-        return itemsDto;
-    }
-*/
-    @Override
-    public List<ItemDtoWithBooking> getAllItemUsers(Long userId) {
-        log.trace("вывод всех предметов пользователя");
-        List<Long> listIdItem = itemRepository.findItemByOwner(userId); // получили список id вещей
         List<ItemDtoWithBooking> itemsDto = new ArrayList<>();
         for (Long id : listIdItem) {
             Item item = find(id);

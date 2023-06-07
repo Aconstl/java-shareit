@@ -1,6 +1,5 @@
 package ru.practicum.shareit.user.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +11,8 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class User {
 
     @Id
