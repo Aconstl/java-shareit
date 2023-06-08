@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Builder
 public class UserDto {
-    private Integer id; // УНИКАЛЬНЫЙ id пользователя
+    private Long id; // УНИКАЛЬНЫЙ id пользователя
     private String name;    // имя или логин пользователя
     @NotBlank
     @Email
