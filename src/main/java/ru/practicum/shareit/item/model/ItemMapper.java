@@ -50,4 +50,12 @@ public  class ItemMapper {
                 .name(item.getName())
                 .build();
     }
+
+    public static ItemDtoForRequests toDtoRequest(Item item) {
+        return ItemDtoForRequests.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .ownerId(item.getOwner().getId())
+                .build();
+    }
 }

@@ -1,11 +1,13 @@
 package ru.practicum.shareit.booking.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.item.model.Item;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +15,9 @@ import java.util.List;
 public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
     List<Booking> findAllByBookerIdOrderByIdDesc(Long id);
 
+   // List<Booking> findApprovedForItems(List<Item> itemId, Sort sort);
+    List<Booking> findAllByStatusAndItemIn(Status status,List<Item> items);
+   // List<Booking> findAllByStatus(Status status);
     @Query(value = "select * " +
             "From bookings " +
             "Where booker_id = :id " +
@@ -124,4 +129,13 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
                            @Param("time") LocalDateTime time);
 
 
+/*
+    @Query (value = "select * " +
+            "From bookings " +
+            "Where item_id  = :idItem " +
+            "AND status like '%APPROVED%' " +
+            "order by end_date desc "
+            , nativeQuery = true)
+    List<Booking> getApproved(@Param("idItem") Long id);
+    */
 }

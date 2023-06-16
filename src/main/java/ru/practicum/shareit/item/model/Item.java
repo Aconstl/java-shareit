@@ -28,8 +28,9 @@ public class Item { //Вещь
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;     // владелец вещи
-    @Transient
-    private String request; //ссылка на запрос (если была создана по запросу другого пользователя)
+
+    @Column(name = "request_id")
+    private Long requestId; //ссылка на запрос (если была создана по запросу другого пользователя)
 
     public Item(Long id, String name, String description, Boolean available) {
         this.id = id;

@@ -1,5 +1,7 @@
 package ru.practicum.shareit.item.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +11,8 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.List;
 
 public interface ItemRepositoryInDb extends JpaRepository<Item,Long> {
+
+    Page findByOwner_IdOrderByIdAsc(Long userId, Pageable pageable);
 
     @Query (value = "select item_id " +
             "from public.items " +
@@ -60,4 +64,11 @@ public interface ItemRepositoryInDb extends JpaRepository<Item,Long> {
             "AND not b.status = 'REJECTED' ", nativeQuery = true)
     Item findBookingUser(@Param("userId") Long userId,
                          @Param("itemId") Long itemId);
+
+    @Query(value = "select * " +
+            "From items i " +
+            "Where request_id  = :requestId " +
+            "order by end_date desc", nativeQuery = true)
+    List<Item> findItemRequest(@Param("requestId") Long requestId);
+
 }
