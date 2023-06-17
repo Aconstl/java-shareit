@@ -5,11 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.practicum.shareit.item.model.ItemDtoForRequests;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
@@ -40,8 +39,9 @@ public class ItemRequest {
     @PastOrPresent
     private LocalDateTime created;
 
-    @Transient
-    private List<ItemDtoForRequests> listsItem;
+    @OneToMany
+    @JoinColumn(name = "request_id")
+    private List<Item> listsItem;
 
     public ItemRequest(String description,User author,LocalDateTime created) {
         this.description = description;

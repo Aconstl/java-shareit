@@ -58,4 +58,12 @@ public  class ItemMapper {
                 .ownerId(item.getOwner().getId())
                 .build();
     }
+
+    public static List<ItemDtoForRequests> toListDtoRequest(List<Item> items) {
+        List<ItemDtoForRequests> itemsDto = new ArrayList<>();
+        for (Item i : items) {
+            itemsDto.add(ItemMapper.toDtoRequest(i));
+        }
+        return itemsDto;
+    }
 }
