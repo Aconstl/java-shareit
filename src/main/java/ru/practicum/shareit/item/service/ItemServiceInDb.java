@@ -23,6 +23,8 @@ import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.model.ItemDtoWithBooking;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepositoryInDb;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.service.ItemRequestServiceInDb;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserServiceInDb;
 
@@ -47,6 +49,8 @@ public class ItemServiceInDb implements ItemService {
     private final BookingRepositoryInDb bookingRepository;
     private final CommentRepositoryInDb commentRepository;
 
+    private final ItemRequestServiceInDb itemRequestService;
+    /*
     @Override
     @Transactional (propagation = Propagation.REQUIRES_NEW)
     public Item create(Long userId, ItemDto itemDto) {
@@ -54,6 +58,20 @@ public class ItemServiceInDb implements ItemService {
         User user = userService.get(userId);
         Item item = ItemMapper.fromDto(itemDto);
         item.setOwner(user);
+        return itemRepository.save(item);
+    }
+*/
+    @Override
+    @Transactional (propagation = Propagation.REQUIRES_NEW)
+    public Item create(Long userId, ItemDto itemDto) {
+        log.trace("добавление предмета");
+        User user = userService.get(userId);
+        Item item = ItemMapper.fromDto(itemDto);
+        item.setOwner(user);
+        if (itemDto.getRequestId() != null) {
+            ItemRequest itemRequest = itemRequestService.getItemRequest(userId, itemDto.getRequestId());
+            item.setRequest(itemRequest);
+        }
         return itemRepository.save(item);
     }
 

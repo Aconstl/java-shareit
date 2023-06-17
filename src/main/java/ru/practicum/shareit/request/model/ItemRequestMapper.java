@@ -19,7 +19,7 @@ public class ItemRequestMapper {
                 .id(itemRequest.getId())
                 .description(itemRequest.getDescription())
                 .created(itemRequest.getCreated())
-                .listsItem(ItemMapper.toListDtoRequest(itemRequest.getListsItem()))
+                .items(ItemMapper.toListDto(itemRequest.getItems()))
                 .build();
     }
 

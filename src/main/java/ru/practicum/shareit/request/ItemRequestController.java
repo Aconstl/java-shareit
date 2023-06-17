@@ -30,14 +30,15 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public List<ItemRequestDto> getAllItemRequest(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                  @RequestParam(value = "from") Long from,
-                                                  @RequestParam(value = "size") Long size) {
+                                                  @RequestParam(value = "from", required = false) Long from,
+                                                  @RequestParam(value = "size", required = false) Long size) {
         return ItemRequestMapper.toDtoList(itemRequestService.getAllItemRequest(userId,from,size));
     }
 
     @GetMapping("/{requestId}")
-    public ItemRequestDto getItemRequest(@PathVariable Long requestId) {
-        return ItemRequestMapper.toDto(itemRequestService.getItemRequest(requestId));
+    public ItemRequestDto getItemRequest(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                         @PathVariable Long requestId) {
+        return ItemRequestMapper.toDto(itemRequestService.getItemRequest(userId,requestId));
     }
 
 }

@@ -39,9 +39,9 @@ public class ItemRequest {
     @PastOrPresent
     private LocalDateTime created;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
-    private List<Item> listsItem;
+    private List<Item> items;
 
     public ItemRequest(String description,User author,LocalDateTime created) {
         this.description = description;

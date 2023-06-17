@@ -16,4 +16,6 @@ public class ItemDto {
     private String description;     //описание вещи
     @NotNull
     private Boolean available;  // статус о том, доступна ли вещь для аренды
+
+    private Long requestId;
 }
