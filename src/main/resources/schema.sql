@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS PUBLIC.REQUESTS
     user_id BIGINT not null,
     created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     constraint pk_request primary key (request_id),
-    CONSTRAINT userInComment_FK FOREIGN KEY (user_id) REFERENCES Public.Users(user_id)
+    CONSTRAINT userInRequest_FK FOREIGN KEY (user_id) REFERENCES Public.Users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS PUBLIC.ITEMS
