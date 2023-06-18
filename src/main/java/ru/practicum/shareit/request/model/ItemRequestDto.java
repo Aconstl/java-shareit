@@ -3,10 +3,7 @@ package ru.practicum.shareit.request.model;
 import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.item.model.ItemDto;
-import ru.practicum.shareit.item.model.ItemDtoForRequests;
-import ru.practicum.shareit.user.model.User;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;

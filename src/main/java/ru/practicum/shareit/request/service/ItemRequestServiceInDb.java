@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.Pagination;
 import ru.practicum.shareit.item.repository.ItemRepositoryInDb;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.model.ItemRequestDto;
@@ -61,14 +61,8 @@ public class ItemRequestServiceInDb implements ItemRequestService {
 
         List<User> users = userRepository.findByIdNot(userId);
 
-        Pageable pageable;
-        if (from == null || size == null) {
-            pageable = Pageable.unpaged();
-        } else if (from >= 0 && size > 0) {
-            pageable = PageRequest.of(from.intValue(), size.intValue());
-        } else {
-            throw new ValidationException("Неккоректное количество запрашиваемых значений");
-        }
+        Pageable pageable = Pagination.setPageable(from,size);
+
         Page<ItemRequest> itemReq = itemRequestRepository.findALlByAuthorInOrderByCreatedAsc(users,pageable);
 
         List<ItemRequest> itemRequests = itemReq.getContent();

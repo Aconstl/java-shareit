@@ -1,5 +1,7 @@
 package ru.practicum.shareit.booking.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,43 +15,44 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
-    List<Booking> findAllByBookerIdOrderByIdDesc(Long id);
+    Page<Booking> findAllByBookerIdOrderByIdDesc(Long id, Pageable pageable);
     List<Booking> findAllByStatusAndItemIn(Status status,List<Item> items);
     @Query(value = "select * " +
             "From bookings " +
             "Where booker_id = :id " +
             "AND start_date < now() AND end_date > now() " +
             "order by end_date desc", nativeQuery = true)
-    List<Booking> findBookingUserCurrent(@Param("id") Long id);
+    Page<Booking> findBookingUserCurrent(@Param("id") Long id, Pageable pageable);
 
     @Query(value = "select * " +
             "From bookings " +
             "Where booker_id = :id " +
             "AND start_date > now() " +
             "order by end_date desc", nativeQuery = true)
-    List<Booking> findBookingUserFuture(@Param("id") Long id);
+    Page<Booking> findBookingUserFuture(@Param("id") Long id, Pageable pageable);
 
     @Query(value = "select * " +
             "From bookings " +
             "Where booker_id = :id " +
             "AND end_date < now() " +
             "order by end_date desc", nativeQuery = true)
-    List<Booking> findBookingUserPast(@Param("id") Long id);
+    Page<Booking> findBookingUserPast(@Param("id") Long id, Pageable pageable);
 
     @Query(value = "select b.* " +
             "From bookings b " +
             "Where booker_id = :id " +
             "AND b.status like :status " +
             "order by end_date desc", nativeQuery = true)
-    List<Booking> findBookingUserStatus(@Param("id") Long id,
-                                        @Param("status") String status);
+    Page<Booking> findBookingUserStatus(@Param("id") Long id,
+                                        @Param("status") String status,
+                                        Pageable pageable);
 
     @Query(value = "select b.* " +
             "From bookings b " +
             "left join items i on i.item_id = b.item_id " +
             "Where i.user_id = :id " +
             "order by end_date desc", nativeQuery = true)
-    List<Booking> findBookingOwnerAll(@Param("id") Long id);
+    Page<Booking> findBookingOwnerAll(@Param("id") Long id, Pageable pageable);
 
     @Query(value = "select b.* " +
             "From bookings b " +
@@ -57,7 +60,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "Where i.user_id = :id " +
             "AND start_date < now() AND end_date > now() " +
             "order by end_date desc", nativeQuery = true)
-    List<Booking> findBookingOwnerCurrent(@Param("id") Long id);
+    Page<Booking> findBookingOwnerCurrent(@Param("id") Long id, Pageable pageable);
 
     @Query(value = "select b.* " +
             "From bookings b " +
@@ -65,7 +68,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "Where i.user_id = :id " +
             "AND start_date > now() " +
             "order by end_date desc", nativeQuery = true)
-    List<Booking> findBookingOwnerFuture(@Param("id") Long id);
+    Page<Booking> findBookingOwnerFuture(@Param("id") Long id, Pageable pageable);
 
     @Query(value = "select b.* " +
             "From bookings b " +
@@ -73,7 +76,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "Where i.user_id = :id " +
             "AND end_date < now() " +
             "order by end_date desc", nativeQuery = true)
-    List<Booking> findBookingOwnerPast(@Param("id") Long id);
+    Page<Booking> findBookingOwnerPast(@Param("id") Long id, Pageable pageable);
 
 
     @Query(value = "select b.* " +
@@ -82,8 +85,9 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
             "Where i.user_id = :id " +
             "AND b.status like :status " +
             "order by end_date desc", nativeQuery = true)
-    List<Booking> findBookingOwnerStatus(@Param("id") Long id,
-                                                 @Param("status") String status);
+    Page<Booking> findBookingOwnerStatus(@Param("id") Long id,
+                                         @Param("status") String status,
+                                         Pageable pageable);
 
     @Modifying
     @Query(value = "UPDATE PUBLIC.BOOKINGS " +

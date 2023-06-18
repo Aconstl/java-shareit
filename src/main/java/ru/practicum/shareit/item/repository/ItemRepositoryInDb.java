@@ -20,11 +20,18 @@ public interface ItemRepositoryInDb extends JpaRepository<Item,Long> {
             "order by item_id asc", nativeQuery = true)
     List<Long> findItemByOwner(@Param("id") Long id);
 
+    /*
     @Query (value = "select * " +
             "from public.items " +
             "where available = true AND " +
             "( LOWER(name) LIKE %?1% OR LOWER(description) LIKE %?1% ) ", nativeQuery = true)
     List<Item> searchItem(String text);
+*/
+    @Query (value = "select * " +
+            "from public.items " +
+            "where available = true AND " +
+            "( LOWER(name) LIKE %?1% OR LOWER(description) LIKE %?1% ) ", nativeQuery = true)
+    Page<Item> searchItem(String text,Pageable pageable);
 
     @Query (value = "select user_id " +
             "from public.items " +

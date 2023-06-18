@@ -54,21 +54,4 @@ public  class ItemMapper {
                 .build();
     }
 
-    public static ItemDtoForRequests toDtoRequest(Item item) {
-        return ItemDtoForRequests.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .ownerId(item.getOwner().getId())
-                .build();
-    }
-
-    public static List<ItemDtoForRequests> toListDtoRequest(List<Item> items) {
-        List<ItemDtoForRequests> itemsDto = new ArrayList<>();
-        if (items != null) {
-            for (Item i : items) {
-                itemsDto.add(ItemMapper.toDtoRequest(i));
-            }
-        }
-        return itemsDto;
-    }
 }

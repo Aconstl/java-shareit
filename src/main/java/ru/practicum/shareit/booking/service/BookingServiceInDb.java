@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.Pagination;
 import ru.practicum.shareit.booking.model.*;
 import ru.practicum.shareit.booking.repository.BookingRepositoryInDb;
 import ru.practicum.shareit.customException.UnsopportedStatus;
@@ -96,45 +99,47 @@ public class BookingServiceInDb implements  BookingService {
     }
 
     @Override
-    public List<Booking> getBookingUser(Long userId, String state) {
+    public List<Booking> getBookingUser(Long userId, String state, Long from, Long size) {
         log.trace("Получение бронирования пользователя");
         userService.get(userId);
         try {
+            Pageable pageable = Pagination.setPageable(from,size);
             StatusForSearch status = StatusForSearch.valueOf(state);
-        switch (status) {
-            case ALL:
-                return bookingRepository.findAllByBookerIdOrderByIdDesc(userId);
-            case CURRENT:
-                return bookingRepository.findBookingUserCurrent(userId);
-            case PAST:
-                return bookingRepository.findBookingUserPast(userId);
-            case FUTURE:
-                return bookingRepository.findBookingUserFuture(userId);
-            default:
-                return bookingRepository.findBookingUserStatus(userId,status.toString());
-        }
+            switch (status) {
+                case ALL:
+                    return bookingRepository.findAllByBookerIdOrderByIdDesc(userId, pageable).getContent();
+                case CURRENT:
+                    return bookingRepository.findBookingUserCurrent(userId, pageable).getContent();
+                case PAST:
+                    return bookingRepository.findBookingUserPast(userId, pageable).getContent();
+                case FUTURE:
+                    return bookingRepository.findBookingUserFuture(userId, pageable).getContent();
+                default:
+                    return bookingRepository.findBookingUserStatus(userId, status.toString(), pageable).getContent();
+            }
         } catch (Exception e) {
             throw new UnsopportedStatus("Unknown state: UNSUPPORTED_STATUS");
         }
     }
 
     @Override
-     public List<Booking> getBookingOwner(Long ownerId, String state) {
+     public List<Booking> getBookingOwner(Long ownerId, String state, Long from, Long size) {
         log.trace("Получение бронирования владельца");
         userService.get(ownerId);
         try {
+            Pageable pageable = Pagination.setPageable(from,size);
             StatusForSearch status = StatusForSearch.valueOf(state);
             switch (status) {
                 case ALL:
-                    return bookingRepository.findBookingOwnerAll(ownerId);
+                    return bookingRepository.findBookingOwnerAll(ownerId,pageable).getContent();
                 case CURRENT:
-                    return bookingRepository.findBookingOwnerCurrent(ownerId);
+                    return bookingRepository.findBookingOwnerCurrent(ownerId,pageable).getContent();
                 case PAST:
-                    return bookingRepository.findBookingOwnerPast(ownerId);
+                    return bookingRepository.findBookingOwnerPast(ownerId,pageable).getContent();
                 case FUTURE:
-                    return bookingRepository.findBookingOwnerFuture(ownerId);
+                    return bookingRepository.findBookingOwnerFuture(ownerId,pageable).getContent();
                 default:
-                    return bookingRepository.findBookingOwnerStatus(ownerId,status.toString());
+                    return bookingRepository.findBookingOwnerStatus(ownerId,status.toString(),pageable).getContent();
             }
         } catch (Exception e) {
             throw new UnsopportedStatus("Unknown state: UNSUPPORTED_STATUS");

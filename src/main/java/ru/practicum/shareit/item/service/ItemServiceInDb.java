@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.Pagination;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.model.Status;
@@ -96,9 +97,9 @@ public class ItemServiceInDb implements ItemService {
     }
 
     @Override
-    public List<ItemDtoWithBooking> getAllItemUsers(Long userId) {
+    public List<ItemDtoWithBooking> getAllItemUsers(Long userId,Long from, Long size) {
         log.trace("вывод всех предметов пользователя");
-        Pageable pageable = Pageable.unpaged();
+        Pageable pageable = Pagination.setPageable(from,size);
 
         @SuppressWarnings("unchecked")
         Page<Item> itemPage = itemRepository.findByOwner_IdOrderByIdAsc(userId, pageable);
@@ -161,10 +162,11 @@ public class ItemServiceInDb implements ItemService {
 
     @Override
     @Transactional
-    public List<Item> search(String text) {
+    public List<Item> search(String text, Long from, Long size) {
         log.trace("поиск предмета по имени");
         if (!text.isBlank()) {
-            return itemRepository.searchItem(text.toLowerCase());
+            Pageable pageable = Pagination.setPageable(from,size);
+            return itemRepository.searchItem(text.toLowerCase(),pageable).getContent();
         } else {
             return new ArrayList<>();
         }
