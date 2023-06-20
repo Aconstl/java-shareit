@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,8 +14,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
+
+    List<Booking> findAllByStatusAndItemInOrderByStartAsc(Status status,List<Item> items);
     Page<Booking> findAllByBookerIdOrderByIdDesc(Long id, Pageable pageable);
-    List<Booking> findAllByStatusAndItemIn(Status status,List<Item> items);
     @Query(value = "select * " +
             "From bookings " +
             "Where booker_id = :id " +
@@ -89,7 +89,7 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
                                          @Param("status") String status,
                                          Pageable pageable);
 
-    @Modifying
+    @Modifying(clearAutomatically = true,flushAutomatically = true)
     @Query(value = "UPDATE PUBLIC.BOOKINGS " +
             "SET status = :status " +
             "WHERE booking_id = :booking_id", nativeQuery = true)
@@ -129,14 +129,4 @@ public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
     Booking getNextBooking(@Param("idItem") Long id,
                            @Param("time") LocalDateTime time);
 
-
-/*
-    @Query (value = "select * " +
-            "From bookings " +
-            "Where item_id  = :idItem " +
-            "AND status like '%APPROVED%' " +
-            "order by end_date desc "
-            , nativeQuery = true)
-    List<Booking> getApproved(@Param("idItem") Long id);
-    */
 }

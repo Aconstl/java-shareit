@@ -51,17 +51,7 @@ public class ItemServiceInDb implements ItemService {
     private final CommentRepositoryInDb commentRepository;
 
     private final ItemRequestServiceInDb itemRequestService;
-    /*
-    @Override
-    @Transactional (propagation = Propagation.REQUIRES_NEW)
-    public Item create(Long userId, ItemDto itemDto) {
-        log.trace("добавление предмета");
-        User user = userService.get(userId);
-        Item item = ItemMapper.fromDto(itemDto);
-        item.setOwner(user);
-        return itemRepository.save(item);
-    }
-*/
+
     @Override
     @Transactional (propagation = Propagation.REQUIRES_NEW)
     public Item create(Long userId, ItemDto itemDto) {
@@ -101,7 +91,6 @@ public class ItemServiceInDb implements ItemService {
         log.trace("вывод всех предметов пользователя");
         Pageable pageable = Pagination.setPageable(from,size);
 
-        @SuppressWarnings("unchecked")
         Page<Item> itemPage = itemRepository.findByOwner_IdOrderByIdAsc(userId, pageable);
 
         List<Item> items = itemPage.getContent();
@@ -111,7 +100,7 @@ public class ItemServiceInDb implements ItemService {
 
         // Выгружаем подтвержденные бронирования отсортированные по дате начала
         // и группируем их по вещам
-        List<Booking> bookingList = bookingRepository.findAllByStatusAndItemIn(Status.APPROVED,items);
+        List<Booking> bookingList = bookingRepository.findAllByStatusAndItemInOrderByStartAsc(Status.APPROVED,items);
         Map<Item, List<Booking>> bookings = bookingList.stream().collect(groupingBy(Booking::getItem, toList()));
 
         // Для каждой вещи находим последнее и следующее бронирование, а также комментарии

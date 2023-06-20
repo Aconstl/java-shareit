@@ -46,7 +46,6 @@ public class ItemRequestServiceInDb implements ItemRequestService {
     public List<ItemRequest> getMyItemRequest(Long userId) {
         log.trace("получение списка запросов пользователя");
         User user = userService.get(userId);
-        //Надо подумать над реализацией - восстановить логику, представленную ревьюером
         List<ItemRequest> listItemRequest = itemRequestRepository.findByAuthor_IdOrderByCreatedAsc(user.getId());
         return listItemRequest;
     }

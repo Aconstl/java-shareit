@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceInDbTest {
-    private UserServiceInDb userService;
+    private UserService userService;
 
     @Mock
     UserRepositoryInDb userRepository;
@@ -34,7 +34,7 @@ class UserServiceInDbTest {
     }
 
     @Test
-    public void getUserTest() {
+    public void createAndGetUserTest() {
         UserDto userDto = UserDto.builder()
                 .id(1L)
                 .name("user1")
@@ -65,7 +65,6 @@ class UserServiceInDbTest {
                 .thenReturn(new ArrayList<>());
         List<User> emptyUserList = userService.getAll();
         assertTrue(emptyUserList.isEmpty());
-
 
         UserDto userDto1 = UserDto.builder()
                 .id(1L)
