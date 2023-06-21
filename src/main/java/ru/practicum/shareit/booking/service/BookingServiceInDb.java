@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,9 +76,6 @@ public class BookingServiceInDb implements  BookingService {
 
     private Booking findBooking(Long bookingId) {
         log.trace("получение данных бронирования");
-        if (bookingId == null || bookingId == 0) {
-            throw new NullPointerException("Id бронирования указан неверно");
-        }
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isEmpty()) {
             throw new IllegalArgumentException("Бронирование с Id № " + bookingId + " не найдено");

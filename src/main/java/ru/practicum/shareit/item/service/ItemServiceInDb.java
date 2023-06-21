@@ -215,7 +215,8 @@ public class ItemServiceInDb implements ItemService {
 
         if (userId.equals(item.getOwner().getId())) {
             lastBooking = bookingRepository.getLastBooking(item.getId());
-            if (lastBooking == null || lastBooking.getBooker().getId().equals(item.getOwner().getId())) {
+            if (lastBooking == null ||
+                    lastBooking.getBooker().getId().equals(item.getOwner().getId())) {
                 lastBooking = null;
             } else {
                 nextBooking = bookingRepository.getNextBooking(item.getId(), lastBooking.getEnd());
