@@ -105,18 +105,6 @@ class UserControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id",is(1L), Long.class));
-
-        /*
-        UserDto userDtoFail = UserDto.builder()
-                .id(2L)
-                .build();
-        mvc.perform(patch("/users/2")
-                        .content(mapper.writeValueAsString(userDtoFail))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                ).andExpect(status().isOk());
-        */
     }
 
     @Test

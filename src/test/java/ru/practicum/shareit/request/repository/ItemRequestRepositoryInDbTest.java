@@ -53,6 +53,7 @@ class ItemRequestRepositoryInDbTest {
     }
 
     @Test
+    @DirtiesContext
     public void testFindALlByAuthorInOrderByCreatedAsc () {
         User user1 = new User(1L,"user1","user1@mail.ru");
         userRepository.save(user1);

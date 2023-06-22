@@ -18,7 +18,6 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepositoryInDb;
 import ru.practicum.shareit.user.service.UserServiceInDb;
 
-import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +30,6 @@ public class ItemRequestServiceInDb implements ItemRequestService {
 
     private final UserServiceInDb userService;
     private final ItemRequestRepositoryInDb itemRequestRepository;
-    private final ItemRepositoryInDb itemRepository;
     private final UserRepositoryInDb userRepository;
 
     @Override
