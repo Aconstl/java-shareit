@@ -47,7 +47,7 @@ class BookingControllerTest {
                 .build();
 
         when(bookingService.create(anyLong(), Mockito.any(BookingDtoIn.class)))
-                .thenAnswer( u -> {
+                .thenAnswer(u -> {
                     BookingDtoIn itemMock = u.getArgument(1, BookingDtoIn.class);
                     Booking booking = new Booking(new Item(),new User(),itemMock.getStart(),
                             itemMock.getEnd(), Status.WAITING);
@@ -74,7 +74,7 @@ class BookingControllerTest {
                 .build();
 
         when(bookingService.changeStatus(anyLong(),anyLong(),anyBoolean()))
-                .thenAnswer( u -> {
+                .thenAnswer(u -> {
                     Booking booking = new Booking(new Item(),new User(),bookingIn.getStart(),
                             bookingIn.getEnd(), Status.APPROVED);
                     booking.setId(1L);
@@ -101,7 +101,7 @@ class BookingControllerTest {
                 .build();
 
         when(bookingService.get(anyLong(),anyLong()))
-                .thenAnswer( u -> {
+                .thenAnswer(u -> {
                     Booking booking = new Booking(new Item(),new User(),bookingIn.getStart(),
                             bookingIn.getEnd(), Status.APPROVED);
                     booking.setId(1L);
@@ -124,7 +124,7 @@ class BookingControllerTest {
                 .build();
 
         when(bookingService.getBookingUser(anyLong(),anyString(),anyLong(),anyLong()))
-                .thenAnswer( u -> {
+                .thenAnswer(u -> {
                     Booking booking1 = new Booking(new Item(),new User(),bookingIn.getStart(),
                             bookingIn.getEnd(), Status.APPROVED);
                     booking1.setId(1L);
@@ -154,7 +154,7 @@ class BookingControllerTest {
                 .build();
 
         when(bookingService.getBookingOwner(anyLong(),anyString(),anyLong(),anyLong()))
-                .thenAnswer( u -> {
+                .thenAnswer(u -> {
                     Booking booking1 = new Booking(new Item(),new User(),bookingIn.getStart(),
                             bookingIn.getEnd(), Status.APPROVED);
                     booking1.setId(1L);

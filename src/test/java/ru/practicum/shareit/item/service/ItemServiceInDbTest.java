@@ -68,7 +68,7 @@ class ItemServiceInDbTest {
                 .available(true)
                 .build();
 
-        User user = new User(1L,"user1","user1@mail.ru") ;
+        User user = new User(1L,"user1","user1@mail.ru");
 
         Item item = ItemMapper.fromDto(itemDto);
         item.setOwner(user);
@@ -95,16 +95,16 @@ class ItemServiceInDbTest {
 
     @Test
     public void getItemFailTest() {
-        assertThrows(NullPointerException.class, ()-> itemService.get(null,1L));
-        assertThrows(NullPointerException.class, ()-> itemService.get(0L,1L));
-        assertThrows(IllegalArgumentException.class, ()-> itemService.get(1L,1L));
+        assertThrows(NullPointerException.class, () -> itemService.get(null,1L));
+        assertThrows(NullPointerException.class, () -> itemService.get(0L,1L));
+        assertThrows(IllegalArgumentException.class, () -> itemService.get(1L,1L));
     }
 
     @Test
     public void createAndGetItemWithAllParametersTest() {
-        User user1 = new User(1L,"user1","user1@mail.ru") ;
-        User user2 = new User(2L,"user2","user2@mail.ru") ;
-        User user3 = new User(3L,"user3","user3@mail.ru") ;
+        User user1 = new User(1L,"user1","user1@mail.ru");
+        User user2 = new User(2L,"user2","user2@mail.ru");
+        User user3 = new User(3L,"user3","user3@mail.ru");
 
         ItemRequest request = new ItemRequest("need item",user1,LocalDateTime.now());
 
@@ -150,7 +150,7 @@ class ItemServiceInDbTest {
 
     @Test
     public void updateAndSearchAndDeleteItemTest() {
-        User user1 = new User(1L,"user1","user1@mail.ru") ;
+        User user1 = new User(1L,"user1","user1@mail.ru");
 
         ItemDto itemDto = ItemDto.builder()
                 .id(1L)
@@ -172,9 +172,9 @@ class ItemServiceInDbTest {
                 .thenReturn(1L);
 
         //Неудачные обновления
-        assertThrows(ValidationException.class, ()-> itemService.update(1L,null,itemDtoUpd));
-        assertThrows(ValidationException.class, ()-> itemService.update(1L,0L,itemDtoUpd));
-        assertThrows(IllegalArgumentException.class, ()-> itemService.update(2L,itemDto.getId(),itemDtoUpd));
+        assertThrows(ValidationException.class, () -> itemService.update(1L,null,itemDtoUpd));
+        assertThrows(ValidationException.class, () -> itemService.update(1L,0L,itemDtoUpd));
+        assertThrows(IllegalArgumentException.class, () -> itemService.update(2L,itemDto.getId(),itemDtoUpd));
 
         when(itemRepository.findById(1L))
                 .thenReturn(Optional.of(ItemMapper.fromDto(itemDtoUpd)));
@@ -211,7 +211,7 @@ class ItemServiceInDbTest {
         when(itemRepository.findBookingUser(anyLong(), anyLong()))
                 .thenReturn(null);
 
-        assertThrows(ValidationException.class, ()-> itemService.postComment(2L,2L,comment));
+        assertThrows(ValidationException.class, () -> itemService.postComment(2L,2L,comment));
 
         when(itemRepository.findBookingUser(userId, itemId))
                 .thenReturn(new Item());
@@ -224,8 +224,8 @@ class ItemServiceInDbTest {
 
     @Test
     public void getAllItemUsersTest() {
-        User user1 = new User(1L,"user1","user1@mail.ru") ;
-        User user2 = new User(2L,"user2","user2@mail.ru") ;
+        User user1 = new User(1L,"user1","user1@mail.ru");
+        User user2 = new User(2L,"user2","user2@mail.ru");
 
         ItemRequest request = new ItemRequest("need item",user1,LocalDateTime.now());
 

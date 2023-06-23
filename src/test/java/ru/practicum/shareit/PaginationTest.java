@@ -26,9 +26,9 @@ class PaginationTest {
 
     @Test
     public void exceptionTest() {
-        assertThrows(ValidationException.class, ()-> Pagination.setPageable(-1L,0L));
-        assertThrows(ValidationException.class, ()-> Pagination.setPageable(-1L,1L));
-        assertThrows(ValidationException.class, ()-> Pagination.setPageable(0L,0L));
+        assertThrows(ValidationException.class, () -> Pagination.setPageable(-1L,0L));
+        assertThrows(ValidationException.class, () -> Pagination.setPageable(-1L,1L));
+        assertThrows(ValidationException.class, () -> Pagination.setPageable(0L,0L));
         Pageable pageable = Pagination.setPageable(0L,1L);
         assertTrue(pageable.isPaged());
     }

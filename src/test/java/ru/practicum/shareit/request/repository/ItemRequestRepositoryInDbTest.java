@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepositoryInDb;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
@@ -30,7 +29,7 @@ class ItemRequestRepositoryInDbTest {
 
     @Test
     @DirtiesContext
-    public void testFindByAuthor_IdOrderByCreatedAsc () {
+    public void testFindByAuthor_IdOrderByCreatedAsc() {
         User user1 = new User(1L,"user1","user1@mail.ru");
         userRepository.save(user1);
 
@@ -54,7 +53,7 @@ class ItemRequestRepositoryInDbTest {
 
     @Test
     @DirtiesContext
-    public void testFindALlByAuthorInOrderByCreatedAsc () {
+    public void testFindALlByAuthorInOrderByCreatedAsc() {
         User user1 = new User(1L,"user1","user1@mail.ru");
         userRepository.save(user1);
 

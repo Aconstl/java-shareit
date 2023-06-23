@@ -51,7 +51,7 @@ class ItemControllerTest {
                 .build();
 
         when(itemService.create(anyLong(),Mockito.any(ItemDto.class)))
-                .thenAnswer( u -> {
+                .thenAnswer(u -> {
                     ItemDto itemMock = u.getArgument(1, ItemDto.class);
                     itemMock.setId(1L);
                     return ItemMapper.fromDto(itemMock);
@@ -123,7 +123,7 @@ class ItemControllerTest {
                 .build();
 
         when(itemService.update(anyLong(),anyLong(),Mockito.any(ItemDto.class)))
-                .thenAnswer( u -> {
+                .thenAnswer(u -> {
                     ItemDto itemMock = u.getArgument(2, ItemDto.class);
                     itemMock.setId(1L);
                     return ItemMapper.fromDto(itemMock);
@@ -154,7 +154,7 @@ class ItemControllerTest {
         commentIn.setText("text");
 
         when(itemService.postComment(anyLong(),anyLong(),Mockito.any(CommentDtoIn.class)))
-                .thenAnswer( u -> {
+                .thenAnswer(u -> {
                     CommentDtoIn comMock = u.getArgument(2, CommentDtoIn.class);
                     Comment out = new Comment(comMock.getText(),new Item(),new User(),LocalDateTime.now());
                     out.setId(1L);

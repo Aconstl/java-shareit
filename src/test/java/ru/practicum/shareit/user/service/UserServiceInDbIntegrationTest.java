@@ -27,12 +27,12 @@ class UserServiceInDbIntegrationTest {
                 .build();
 
         User user = userService.create(userDto);
-        User userTest =userService.get(user.getId());
+        User userTest = userService.get(user.getId());
         assertEquals(user.getId(),userTest.getId());
         assertEquals(user.getName(),userTest.getName());
         assertEquals(user.getEmail(),userTest.getEmail());
-        assertThrows(NullPointerException.class, ()-> userService.get(0L));
-        assertThrows(NullPointerException.class, ()-> userService.get(null));
+        assertThrows(NullPointerException.class, () -> userService.get(0L));
+        assertThrows(NullPointerException.class, () -> userService.get(null));
     }
 
     @Test
@@ -75,7 +75,7 @@ class UserServiceInDbIntegrationTest {
         assertEquals(userList.get(2).getEmail(),userService.get(3L).getEmail());
 
         userService.delete(1L);
-        assertThrows(IllegalArgumentException.class, ()-> userService.get(1L));
+        assertThrows(IllegalArgumentException.class, () -> userService.get(1L));
         assertEquals(userService.getAll().size(),2);
     }
 

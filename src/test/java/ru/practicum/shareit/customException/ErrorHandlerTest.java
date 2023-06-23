@@ -15,6 +15,7 @@ class ErrorHandlerTest {
     public void setUp() {
         errorHandler = new ErrorHandler();
     }
+
     @Test
     void conflictExceptionTest() {
         ErrorResponse response = errorHandler.conflictException(new ConflictException("ConflictException"));
@@ -51,7 +52,7 @@ class ErrorHandlerTest {
     }
 
     @Test
-    void Exception2Test() {
+    void exception2Test() {
         ErrorResponseOne response = errorHandler.exception(new UnsopportedStatus("UnsopportedStatus"));
         assertEquals(response.getError(),"UnsopportedStatus");
     }

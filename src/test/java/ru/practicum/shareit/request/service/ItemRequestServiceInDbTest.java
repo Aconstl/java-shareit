@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.model.ItemRequestDto;
@@ -18,7 +17,6 @@ import ru.practicum.shareit.user.repository.UserRepositoryInDb;
 import ru.practicum.shareit.user.service.UserServiceInDb;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,9 +69,10 @@ class ItemRequestServiceInDbTest {
         assertEquals(requests.get(0).getDescription(),"description1");
         verify(itemRequestRepository,times(1)).findByAuthor_IdOrderByCreatedAsc(anyLong());
 
-        assertThrows(NullPointerException.class, ()-> itemRequestService.getAllItemRequest(null,null,null));
-        assertThrows(NullPointerException.class, ()-> itemRequestService.getAllItemRequest(0L,null,null));
-
+        assertThrows(NullPointerException.class,
+                () -> itemRequestService.getAllItemRequest(null,null,null));
+        assertThrows(NullPointerException.class,
+                () -> itemRequestService.getAllItemRequest(0L,null,null));
         when(userRepository.findByIdNot(anyLong()))
                 .thenReturn(List.of(user));
 
@@ -83,14 +82,17 @@ class ItemRequestServiceInDbTest {
         List<ItemRequest> requestsAllIR = itemRequestService.getAllItemRequest(1L,null,null);
         assertTrue(requestsAllIR.isEmpty());
         verify(userRepository,times(1)).findByIdNot(anyLong());
-        verify(itemRequestRepository,times(1)).findALlByAuthorInOrderByCreatedAsc(anyList(),any(Pageable.class));
+        verify(itemRequestRepository,
+                times(1)).findALlByAuthorInOrderByCreatedAsc(anyList(),any(Pageable.class));
 
-        assertThrows(NullPointerException.class, ()-> itemRequestService.getItemRequest(1L,null));
-        assertThrows(NullPointerException.class, ()-> itemRequestService.getItemRequest(1L,0L));
+        assertThrows(NullPointerException.class,
+                () -> itemRequestService.getItemRequest(1L,null));
+        assertThrows(NullPointerException.class,
+                () -> itemRequestService.getItemRequest(1L,0L));
 
         when(itemRequestRepository.findById(anyLong()))
                 .thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, ()-> itemRequestService.getItemRequest(1L,1L));
+        assertThrows(IllegalArgumentException.class, () -> itemRequestService.getItemRequest(1L,1L));
 
         when(itemRequestRepository.findById(anyLong()))
                 .thenReturn(Optional.of(ItemRequestMapper.fromDto(itemRequestDto,user)));

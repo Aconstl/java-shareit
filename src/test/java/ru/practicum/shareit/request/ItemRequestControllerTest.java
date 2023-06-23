@@ -64,7 +64,7 @@ class ItemRequestControllerTest {
     @Test
     public void getMyItemRequestTest() throws Exception {
         when(itemRequestService.getMyItemRequest(anyLong()))
-                .thenAnswer( u -> {
+                .thenAnswer(u -> {
                     ItemRequest request1 = new ItemRequest(1L,"description1",new User(),
                             LocalDateTime.now(),new ArrayList<>());
                     ItemRequest request2 = new ItemRequest(2L,"description2",new User(),
@@ -83,7 +83,7 @@ class ItemRequestControllerTest {
     @Test
     public void getAllItemRequestTest() throws Exception {
         when(itemRequestService.getAllItemRequest(anyLong(),anyLong(),anyLong()))
-                .thenAnswer( u -> {
+                .thenAnswer(u -> {
                     ItemRequest request1 = new ItemRequest(1L,"description1",new User(),
                             LocalDateTime.now(),new ArrayList<>());
                     ItemRequest request2 = new ItemRequest(2L,"description2",new User(),

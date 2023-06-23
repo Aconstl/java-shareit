@@ -46,7 +46,7 @@ class UserControllerTest {
                 .build();
 
         when(userService.create(Mockito.any(UserDto.class)))
-                .thenAnswer( u -> {
+                .thenAnswer(u -> {
                     UserDto userMock = u.getArgument(0, UserDto.class);
                     userMock.setId(1L);
                     return UserMapper.fromDto(userMock);
@@ -78,7 +78,7 @@ class UserControllerTest {
 
         when(userService.getAll())
                 .thenReturn(List.of(new User(1L,"name1","email1@mail.com"),
-                        new User(2L,"name2","email2@mail.com") ));
+                        new User(2L,"name2","email2@mail.com")));
 
         mvc.perform(get("/users/")
                         .accept(MediaType.APPLICATION_JSON)

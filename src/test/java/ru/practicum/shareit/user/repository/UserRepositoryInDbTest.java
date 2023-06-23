@@ -47,7 +47,7 @@ class UserRepositoryInDbTest {
         userRepository.save(new User(1L, "user1","user1@mail.com"));
 
         userRepository.updateUserEmail(1L, "user1Update@mail.com");
-        assertEquals(userRepository.findById(1L).get().getEmail(),"user1Update@mail.com" );
+        assertEquals(userRepository.findById(1L).get().getEmail(),"user1Update@mail.com");
     }
 
 }

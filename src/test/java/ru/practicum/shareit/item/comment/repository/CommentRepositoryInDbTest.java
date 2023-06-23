@@ -31,7 +31,7 @@ class CommentRepositoryInDbTest {
     @DirtiesContext
     public void testFindAllByItemIn() {
         User user1 = new User(1L,"user1","user1@mail.ru");
-        userRepository.save(user1 );
+        userRepository.save(user1);
 
         User user2 = new User(2L,"user2","user2@mail.ru");
         userRepository.save(user2);
@@ -72,7 +72,7 @@ class CommentRepositoryInDbTest {
     @DirtiesContext
     public void testFindAllByItemId() {
         User user1 = new User(1L,"user1","user1@mail.ru");
-        userRepository.save(user1 );
+        userRepository.save(user1);
 
         User user2 = new User(2L,"user2","user2@mail.ru");
         userRepository.save(user2);
