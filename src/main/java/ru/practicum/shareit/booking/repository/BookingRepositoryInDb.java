@@ -16,7 +16,9 @@ import java.util.List;
 public interface BookingRepositoryInDb extends JpaRepository<Booking,Long> {
 
     List<Booking> findAllByStatusAndItemInOrderByStartAsc(Status status,List<Item> items);
+
     Page<Booking> findAllByBookerIdOrderByIdDesc(Long id, Pageable pageable);
+
     @Query(value = "select * " +
             "From bookings " +
             "Where booker_id = :id " +

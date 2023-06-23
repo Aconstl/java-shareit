@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Pagination;
-import ru.practicum.shareit.item.repository.ItemRepositoryInDb;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.model.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequestMapper;
@@ -29,7 +28,9 @@ import java.util.Optional;
 public class ItemRequestServiceInDb implements ItemRequestService {
 
     private final UserServiceInDb userService;
+
     private final ItemRequestRepositoryInDb itemRequestRepository;
+
     private final UserRepositoryInDb userRepository;
 
     @Override

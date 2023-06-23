@@ -113,7 +113,7 @@ public class ItemServiceInDb implements ItemService {
             Booking lastBooking = null;
             Booking nextBooking = null;
             //Поиск последнего
-            if (bookingItem !=null && !bookingItem.isEmpty()) {
+            if (bookingItem != null && !bookingItem.isEmpty()) {
                 for (Booking b : bookingItem) {
                     if (b.getStart().isBefore(LocalDateTime.now())) {
                         if (lastBooking == null || lastBooking.getStart().isBefore(b.getStart())) {

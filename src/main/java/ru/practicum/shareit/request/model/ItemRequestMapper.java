@@ -25,7 +25,7 @@ public class ItemRequestMapper {
 
     public static List<ItemRequestDto> toDtoList(List<ItemRequest> requests) {
         List<ItemRequestDto> itemRequest = new ArrayList<>();
-        for(ItemRequest i : requests) {
+        for (ItemRequest i : requests) {
             itemRequest.add(ItemRequestMapper.toDto(i));
         }
         return itemRequest;
