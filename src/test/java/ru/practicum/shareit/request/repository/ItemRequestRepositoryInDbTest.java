@@ -42,7 +42,7 @@ class ItemRequestRepositoryInDbTest {
         ItemRequest request3 = new ItemRequest("itemReq3",user2, LocalDateTime.now().minusDays(2));
         itemRequestRepository.save(request3);
 
-        List<ItemRequest> requests = itemRequestRepository.findByAuthor_IdOrderByCreatedAsc(2L);
+        List<ItemRequest> requests = itemRequestRepository.findByAuthor_IdOrderByCreatedAsc(user2.getId());
         assertEquals(requests.size(),2);
         assertEquals(requests.get(0).getId(),3L);
         assertEquals(requests.get(1).getId(),1L);
