@@ -22,18 +22,16 @@ class ItemRequestRepositoryInDbTest {
     UserRepositoryInDb userRepository;
 
     @Autowired
-    ItemRepositoryInDb itemRepository;
-
-    @Autowired
     ItemRequestRepositoryInDb itemRequestRepository;
 
     @Test
     @DirtiesContext
     public void testFindByAuthor_IdOrderByCreatedAsc() {
-        User user1 = new User(1L,"user1","user1@mail.ru");
+
+        User user1 = new User(null,"user1","user1@mail.ru");
         userRepository.save(user1);
 
-        User user2 = new User(2L,"user2","user2@mail.ru");
+        User user2 = new User(null,"user2","user2@mail.ru");
         userRepository.save(user2);
 
         ItemRequest request1 = new ItemRequest("itemReq1",user2, LocalDateTime.now());

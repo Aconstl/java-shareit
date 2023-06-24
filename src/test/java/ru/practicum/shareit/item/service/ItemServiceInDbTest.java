@@ -132,7 +132,7 @@ class ItemServiceInDbTest {
                 .thenReturn(new Booking(item,user3,LocalDateTime.now().minusDays(2),
                         LocalDateTime.now().minusDays(1), Status.APPROVED));
 
-        when(bookingRepository.getNextBooking(itemDto.getId(),LocalDateTime.now().minusDays(1)))
+        when(bookingRepository.getNextBooking(anyLong(),any(LocalDateTime.class)))
                 .thenReturn(new Booking(item,user3,LocalDateTime.now().plusDays(1),
                       LocalDateTime.now().plusDays(2), Status.WAITING));
 
