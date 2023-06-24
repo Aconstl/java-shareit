@@ -140,7 +140,8 @@ class ItemServiceInDbTest {
                 .thenReturn(List.of(new Comment("comment",item,user3,LocalDateTime.now())));
 
         itemService.create(user2.getId(),itemDto);
-        // добавить сразу логику на бронирование, комментарии
+
+
         ItemDtoWithBooking itemRes = itemService.get(1L,2L);
         assertEquals(itemRes.getId(),1L);
         assertNotNull(itemRes.getLastBooking());
