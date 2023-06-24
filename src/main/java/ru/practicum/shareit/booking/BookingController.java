@@ -9,6 +9,8 @@ import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -41,17 +43,17 @@ public class BookingController {
     public List<BookingDtoOut> getBookingUser(
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @RequestParam(value = "state", defaultValue = "ALL") String state,
-            @RequestParam(value = "from", required = false) Long from,
-            @RequestParam(value = "size", required = false) Long size) {
+            @RequestParam(value = "from",  required = false) @PositiveOrZero Long from,
+            @RequestParam(value = "size", required = false) @Positive Long size) {
         return BookingMapper.toDtoList(bookingService.getBookingUser(userId,state,from,size));
     }
 
     @GetMapping ("/owner")
     public List<BookingDtoOut> getBookingOwner(
             @RequestHeader("X-Sharer-User-Id") Long ownerId,
-            @RequestParam(value = "state", defaultValue = "ALL", required = false) String state,
-            @RequestParam(value = "from", required = false) Long from,
-            @RequestParam(value = "size", required = false) Long size) {
+            @RequestParam(value = "state", defaultValue = "ALL") String state,
+            @RequestParam(value = "from", required = false) @PositiveOrZero Long from,
+            @RequestParam(value = "size", required = false) @Positive Long size) {
         return BookingMapper.toDtoList(bookingService.getBookingOwner(ownerId,state,from,size));
     }
 
