@@ -4,11 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.Pagination;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingMapper;
+import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepositoryInDb;
 import ru.practicum.shareit.item.comment.model.Comment;
 import ru.practicum.shareit.item.comment.model.CommentDtoIn;
@@ -20,15 +24,18 @@ import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.model.ItemDtoWithBooking;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepositoryInDb;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.service.ItemRequestServiceInDb;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserServiceInDb;
 
 
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -43,6 +50,8 @@ public class ItemServiceInDb implements ItemService {
     private final BookingRepositoryInDb bookingRepository;
     private final CommentRepositoryInDb commentRepository;
 
+    private final ItemRequestServiceInDb itemRequestService;
+
     @Override
     @Transactional (propagation = Propagation.REQUIRES_NEW)
     public Item create(Long userId, ItemDto itemDto) {
@@ -50,6 +59,10 @@ public class ItemServiceInDb implements ItemService {
         User user = userService.get(userId);
         Item item = ItemMapper.fromDto(itemDto);
         item.setOwner(user);
+        if (itemDto.getRequestId() != null) {
+            ItemRequest itemRequest = itemRequestService.getItemRequest(userId, itemDto.getRequestId());
+            item.setRequest(itemRequest);
+        }
         return itemRepository.save(item);
     }
 
@@ -74,23 +87,75 @@ public class ItemServiceInDb implements ItemService {
     }
 
     @Override
-    public List<ItemDtoWithBooking> getAllItemUsers(Long userId) {
+    public List<ItemDtoWithBooking> getAllItemUsers(Long userId,Long from, Long size) {
         log.trace("вывод всех предметов пользователя");
-        List<Long> listIdItem = itemRepository.findItemByOwner(userId);
-        List<ItemDtoWithBooking> itemsDto = new ArrayList<>();
-        for (Long id : listIdItem) {
-            Item item = find(id);
-            itemsDto.add(addBookingAndComment(item,userId));
+        Pageable pageable = Pagination.setPageable(from,size);
+
+        Page<Item> itemPage = itemRepository.findByOwner_IdOrderByIdAsc(userId, pageable);
+
+        List<Item> items = itemPage.getContent();
+        // Выгружаем комментарии, группируем их по вещам и конвертируем в dto
+        List<Comment> commentList =  commentRepository.findAllByItemIn(items);
+        Map<Item, List<Comment>> comments = commentList.stream().collect(groupingBy(Comment::getItem, toList()));
+
+        // Выгружаем подтвержденные бронирования отсортированные по дате начала
+        // и группируем их по вещам
+        List<Booking> bookingList = bookingRepository.findAllByStatusAndItemInOrderByStartAsc(Status.APPROVED,items);
+        Map<Item, List<Booking>> bookings = bookingList.stream().collect(groupingBy(Booking::getItem, toList()));
+
+        // Для каждой вещи находим последнее и следующее бронирование, а также комментарии
+        // и формируем результат
+        List<ItemDtoWithBooking> results = new ArrayList<>();
+
+        for (Item item : items) {
+
+            List<Booking> bookingItem = bookings.get(item);
+            Booking lastBooking = null;
+            Booking nextBooking = null;
+            //Поиск последнего
+            if (bookingItem != null && !bookingItem.isEmpty()) {
+                for (Booking b : bookingItem) {
+                    if (b.getStart().isBefore(LocalDateTime.now())) {
+                        if (lastBooking == null || lastBooking.getStart().isBefore(b.getStart())) {
+                            lastBooking = b;
+                        }
+                    }
+                }
+
+                //Поиск следующего
+                if (lastBooking != null) {
+                    for (Booking b : bookingItem) {
+                        if (lastBooking.getStart().isBefore(b.getStart())) {
+                            if (nextBooking == null || nextBooking.getStart().isAfter(b.getStart())) {
+                                nextBooking = b;
+                            }
+                        }
+                    }
+                }
+            }
+            //Поиск комментов
+            List<Comment> commentsItem = new ArrayList<>();
+            if (comments != null && !comments.isEmpty()) {
+                commentsItem = comments.get(item);
+            }
+            //Преобразование в нужный формат
+            ItemDtoWithBooking dto = ItemMapper.toDtoWithBooking(item,
+                    BookingMapper.toDtoForItem(lastBooking),
+                    BookingMapper.toDtoForItem(nextBooking),
+                    CommentMapper.toListDto(commentsItem));
+            results.add(dto);
         }
-        return itemsDto;
+
+        return results;
     }
 
     @Override
     @Transactional
-    public List<Item> search(String text) {
+    public List<Item> search(String text, Long from, Long size) {
         log.trace("поиск предмета по имени");
         if (!text.isBlank()) {
-            return itemRepository.searchItem(text.toLowerCase());
+            Pageable pageable = Pagination.setPageable(from,size);
+            return itemRepository.searchItem(text.toLowerCase(),pageable).getContent();
         } else {
             return new ArrayList<>();
         }
@@ -150,7 +215,8 @@ public class ItemServiceInDb implements ItemService {
 
         if (userId.equals(item.getOwner().getId())) {
             lastBooking = bookingRepository.getLastBooking(item.getId());
-            if (lastBooking == null || lastBooking.getBooker().getId().equals(item.getOwner().getId())) {
+            if (lastBooking == null ||
+                    lastBooking.getBooker().getId().equals(item.getOwner().getId())) {
                 lastBooking = null;
             } else {
                 nextBooking = bookingRepository.getNextBooking(item.getId(), lastBooking.getEnd());

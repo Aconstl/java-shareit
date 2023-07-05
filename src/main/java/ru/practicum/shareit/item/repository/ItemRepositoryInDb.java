@@ -1,33 +1,29 @@
 package ru.practicum.shareit.item.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.List;
-
 public interface ItemRepositoryInDb extends JpaRepository<Item,Long> {
 
-    @Query (value = "select item_id " +
-            "from public.items " +
-            "where user_id = :id " +
-            "order by item_id asc", nativeQuery = true)
-    List<Long> findItemByOwner(@Param("id") Long id);
+    Page<Item> findByOwner_IdOrderByIdAsc(Long userId, Pageable pageable);
 
     @Query (value = "select * " +
             "from public.items " +
             "where available = true AND " +
             "( LOWER(name) LIKE %?1% OR LOWER(description) LIKE %?1% ) ", nativeQuery = true)
-    List<Item> searchItem(String text);
+    Page<Item> searchItem(String text,Pageable pageable);
 
     @Query (value = "select user_id " +
             "from public.items " +
             "where item_id = ?1", nativeQuery = true)
     Long getOwnerId(Long id);
 
-    @Modifying
+    @Modifying(clearAutomatically = true,flushAutomatically = true)
     @Query (value = "UPDATE PUBLIC.ITEMS " +
             "SET NAME = :name " +
             "WHERE item_id = :item_id", nativeQuery = true)
@@ -35,7 +31,7 @@ public interface ItemRepositoryInDb extends JpaRepository<Item,Long> {
                     @Param("name") String name
                     );
 
-    @Modifying
+    @Modifying(clearAutomatically = true,flushAutomatically = true)
     @Query (value = "UPDATE PUBLIC.ITEMS " +
             "SET description = :description " +
             "WHERE item_id = :item_id", nativeQuery = true)
@@ -43,7 +39,7 @@ public interface ItemRepositoryInDb extends JpaRepository<Item,Long> {
                            @Param("description") String description
                             );
 
-    @Modifying
+    @Modifying(clearAutomatically = true,flushAutomatically = true)
     @Query (value = "UPDATE PUBLIC.ITEMS " +
             "SET available = :available " +
             "WHERE item_id = :item_id", nativeQuery = true)
@@ -60,4 +56,5 @@ public interface ItemRepositoryInDb extends JpaRepository<Item,Long> {
             "AND not b.status = 'REJECTED' ", nativeQuery = true)
     Item findBookingUser(@Param("userId") Long userId,
                          @Param("itemId") Long itemId);
+
 }

@@ -7,9 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.user.model.User;
 
+import java.util.List;
+
 public interface UserRepositoryInDb extends JpaRepository<User,Long> {
 
-    @Modifying
+    List<User> findByIdNot(Long userId);
+
+    @Modifying(clearAutomatically = true,flushAutomatically = true)
     @Query (value = "UPDATE PUBLIC.USERS " +
             "SET username = :username " +
             "WHERE user_id = :user_id", nativeQuery = true)
@@ -17,7 +21,7 @@ public interface UserRepositoryInDb extends JpaRepository<User,Long> {
                     @Param("username") String username
                    );
 
-    @Modifying
+    @Modifying(clearAutomatically = true,flushAutomatically = true)
     @Query (value = "UPDATE PUBLIC.USERS " +
             "SET email = :email " +
             "WHERE user_id = :user_id", nativeQuery = true)

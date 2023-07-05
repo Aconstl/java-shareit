@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.model;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -22,9 +23,11 @@ public class Booking {
     private Long id;
     @NotNull
     @Column(name = "start_date")
+    @DateTimeFormat(pattern = "YYYY-MM-DDTHH:mm:ss")
     private LocalDateTime start;
     @NotNull
     @Column(name = "end_date")
+    @DateTimeFormat(pattern = "YYYY-MM-DDTHH:mm:ss")
     private LocalDateTime end;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", nullable = false)

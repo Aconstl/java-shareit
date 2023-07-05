@@ -15,6 +15,7 @@ public  class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+                .requestId(item.getRequest() != null ? item.getRequest().getId() : null)
                 .build();
     }
 
@@ -37,10 +38,12 @@ public  class ItemMapper {
 
     public static List<ItemDto> toListDto(List<Item> items) {
         List<ItemDto> itemsDto = new ArrayList<>();
-        for (Item i : items) {
-            itemsDto.add(ItemMapper.toDto(i));
+        if (items != null) {
+            for (Item i : items) {
+                itemsDto.add(ItemMapper.toDto(i));
+            }
         }
-        return itemsDto;
+            return itemsDto;
     }
 
 
@@ -50,4 +53,5 @@ public  class ItemMapper {
                 .name(item.getName())
                 .build();
     }
+
 }
