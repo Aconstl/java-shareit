@@ -17,7 +17,8 @@
     <name>ShareIt</name>
     <modules>
         <module>shareIt-server</module>
-    </modules>
+		<module>shareit-gateway</module>
+	</modules>
 
     <properties>
 		<java.version>11</java.version>
@@ -67,12 +68,6 @@
 	</dependencies>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>shareIt-server/src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
