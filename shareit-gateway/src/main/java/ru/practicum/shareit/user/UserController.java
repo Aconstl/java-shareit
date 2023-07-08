@@ -20,32 +20,34 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody @Validated UserDto userDto) {
+    public ResponseEntity<Object> newUser(@RequestBody @Validated UserDto userDto) {
         log.info("Добавление пользователя");
-        return userClient.createUser(userDto);
+        return userClient.newUser(userDto);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<Object> getUser(@PathVariable Long userId) {
+        log.info("Получение пользователя с id {}", userId);
+        return userClient.getUser(userId);
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAll() {
+    public ResponseEntity<Object> getAll() {
         log.info("Получение всех пользователей");
-        return userClient.getAllUsers();
+        return userClient.getAll();
+    }
+
+    @PatchMapping("/{userId}")
+    public ResponseEntity<Object> updateUser(@PathVariable Long userId,
+                                             @RequestBody @Validated UserDto userDto) {
+        log.info("Обновление пользователя");
+        return userClient.updateUser(userId, userDto);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Object> findById(@PathVariable int userId) {
-        log.info("Получение пользователя с id {}", userId);
-        return userClient.findUserById(userId);
-    }
-
-    @GetMapping("/{userId}")
-    public void delete(@PathVariable int userId) {
+    public void deleteUser(@PathVariable Long userId) {
         log.info("Удаление пользователя {}", userId);
         userClient.deleteUser(userId);
     }
 
-    @PatchMapping("/{userId}")
-    public ResponseEntity<Object> patch(@PathVariable int userId, @RequestBody @Validated UserDto userDto) {
-        log.info("Обновление пользователя");
-        return userClient.patchUser(userId, userDto);
-    }
 }
