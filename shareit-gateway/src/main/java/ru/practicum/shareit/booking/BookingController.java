@@ -1,9 +1,8 @@
 package ru.practicum.shareit.booking;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +11,18 @@ import javax.validation.ValidationException;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
-@Controller
-@RequestMapping(path = "/bookings")
-@RequiredArgsConstructor
 @Slf4j
+@RestController
+@RequestMapping(path = "/bookings")
 @Validated
 public class BookingController {
 
     private final BookingClient bookingClient;
+
+    @Autowired
+    public BookingController(BookingClient bookingClient) {
+        this.bookingClient = bookingClient;
+    }
 
     @PostMapping
     public ResponseEntity<Object> newBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
