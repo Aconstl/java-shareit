@@ -44,7 +44,7 @@ public class UserController {
         return userClient.updateUser(userId, userDto);
     }
 
-    @GetMapping("/{userId}")
+    @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {
         log.info("Удаление пользователя {}", userId);
         userClient.deleteUser(userId);
