@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.customException.UnsopportedStatus;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -26,12 +27,13 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<Object> newBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                           @RequestBody @Valid BookingDtoIn requestDto) {
+                                           @RequestBody @Valid BookingDtoIn bookingDtoIn) {
         log.trace("создание бронирования");
-        if (requestDto.getEnd().isBefore(requestDto.getStart()) || requestDto.getStart().isEqual(requestDto.getEnd())) {
+        if (bookingDtoIn.getStart().isAfter(bookingDtoIn.getEnd()) ||
+                bookingDtoIn.getStart().isEqual(bookingDtoIn.getEnd())) {
             throw new ValidationException("время бронирования указано некорректно");
         }
-        return bookingClient.newBooking(userId, requestDto);
+        return bookingClient.newBooking(userId, bookingDtoIn);
     }
 
     @PatchMapping("/{bookingId}")
@@ -58,7 +60,7 @@ public class BookingController {
                                               Integer size) {
         log.trace("Получение бронирования пользователя");
         StatusForSearch state = StatusForSearch.from(stateParam)
-                .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
+                .orElseThrow(() -> new UnsopportedStatus("Unknown state: UNSUPPORTED_STATUS"));
         return bookingClient.getBookingUser(userId, state, from, size);
     }
 
@@ -72,7 +74,7 @@ public class BookingController {
                                                      Integer size) {
         log.trace("Получение бронирования владельца");
         StatusForSearch state = StatusForSearch.from(stateParam)
-                .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
+                .orElseThrow(() -> new UnsopportedStatus("Unknown state: UNSUPPORTED_STATUS"));
         return bookingClient.getBookingOwner(userId, state, from, size);
     }
 }
