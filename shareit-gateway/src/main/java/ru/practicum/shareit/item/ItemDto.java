@@ -1,13 +1,15 @@
 package ru.practicum.shareit.item;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Data
 @Builder
+@Getter
+@Setter
 public class ItemDto {
     private Long id;
     @NotBlank

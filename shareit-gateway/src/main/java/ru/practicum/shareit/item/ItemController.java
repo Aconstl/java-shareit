@@ -25,7 +25,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<Object> newItem(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                         @RequestBody @Valid ItemDto itemDto) {
+                                         @RequestBody @Validated ItemDto itemDto) {
         log.trace("добавление предмета");
         return itemClient.newItem(userId, itemDto);
     }

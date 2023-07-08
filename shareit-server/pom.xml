@@ -10,7 +10,7 @@
     <artifactId>shareit-server</artifactId>
     <packaging>jar</packaging>
 
-    <name>shareIt-server</name>
+    <name>shareit-server</name>
     <url>http://maven.apache.org</url>
 
     <properties>
