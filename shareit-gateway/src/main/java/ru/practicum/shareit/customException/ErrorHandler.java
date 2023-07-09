@@ -12,7 +12,7 @@ import javax.validation.ValidationException;
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
-
+/*
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse conflictException(final ConflictException e) {
@@ -26,7 +26,7 @@ public class ErrorHandler {
         log.error("Ошибка 404 : {}", e.getMessage());
         return new ErrorResponse("Ошибка ввода: ", e.getMessage());
     }
-
+*/
     @ExceptionHandler
     @ResponseStatus (HttpStatus.BAD_REQUEST)
     public ErrorResponse validateArgumentException(final MethodArgumentNotValidException e) {
@@ -40,13 +40,14 @@ public class ErrorHandler {
         log.error("Ошибка 400: {}", e.getMessage());
         return new ErrorResponse("Ошибка валидации: ", e.getMessage());
     }
-
+/*
     @ExceptionHandler
     @ResponseStatus (HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse exception(final Exception e) {
         log.error("Ошибка 500: {}", e.getMessage());
         return new ErrorResponse("Исключение: ", e.getMessage());
     }
+*/
 
     @ExceptionHandler
     @ResponseStatus (HttpStatus.INTERNAL_SERVER_ERROR)
@@ -54,4 +55,5 @@ public class ErrorHandler {
         log.error("Ошибка 500: {}", u.getMessage());
         return new ErrorResponseOne(u.getMessage());
     }
+
 }

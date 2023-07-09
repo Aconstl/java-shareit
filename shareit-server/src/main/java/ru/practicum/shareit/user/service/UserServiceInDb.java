@@ -13,7 +13,7 @@ import ru.practicum.shareit.user.model.UserDto;
 import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepositoryInDb;
 
-import javax.validation.ValidationException;
+//import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +58,14 @@ public class UserServiceInDb implements UserService {
     @Transactional
     public User update(Long id,UserDto userDto) {
         log.trace("обновление пользователия");
+        if (userDto.getEmail() != null) {
+            userRepository.updateUserEmail(id,userDto.getEmail());
+        }
+        if (userDto.getName() != null) {
+            userRepository.updateUsername(id,userDto.getName());
+        }
+        return get(id);
+        /*
         if (isValidId(id)) {
             if (userDto.getEmail() != null) {
                 userRepository.updateUserEmail(id,userDto.getEmail());
@@ -68,6 +76,7 @@ public class UserServiceInDb implements UserService {
             return get(id);
         }
         return null;
+         */
     }
 
     @Override
@@ -76,12 +85,12 @@ public class UserServiceInDb implements UserService {
         log.trace("удаление пользователя");
         userRepository.deleteById(id);
     }
-
+/*
     private boolean isValidId(Long id) {
         if (id == null || id == 0) {
             throw new ValidationException("пользователь имеет ошибочное id");
         } else return true;
         //else return !users.containsKey(id); // если не найден - true; если найден - false
     }
-
+*/
 }

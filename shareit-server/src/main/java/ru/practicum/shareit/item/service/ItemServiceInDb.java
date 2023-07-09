@@ -171,6 +171,24 @@ public class ItemServiceInDb implements ItemService {
     @Transactional
     public Item update(Long userId, Long itemId, ItemDto itemDto) {
         log.trace("обновление предмета");
+        if (!itemRepository.getOwnerId(itemId).equals(userId)) {
+            throw new IllegalArgumentException("пользователь не является собственником указанного предмета");
+        } else {
+            String name = itemDto.getName();
+            String description = itemDto.getDescription();
+            Boolean available = itemDto.getAvailable();
+            if (itemDto.getName() != null) {
+                itemRepository.updateName(itemId,name);
+            }
+            if (itemDto.getDescription() != null) {
+                itemRepository.updateDescription(itemId, description);
+            }
+            if (itemDto.getAvailable() != null) {
+                itemRepository.updateAvailable(itemId, available);
+            }
+        }
+        return find(itemId);
+        /*
         if (itemId == null || itemId == 0) {
             throw new ValidationException("предмет имеет ошибочное id");
         } else {
@@ -192,6 +210,7 @@ public class ItemServiceInDb implements ItemService {
             }
         }
         return find(itemId);
+         */
     }
 
     @Override
