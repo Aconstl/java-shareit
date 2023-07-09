@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.model.ItemRequestDto;
@@ -45,6 +46,7 @@ class ItemRequestServiceInDbTest {
     }
 
     @Test
+    @DirtiesContext
     void newItemRequestAndGetTest() {
         ItemRequestDto itemRequestDto = ItemRequestDto.builder()
                 .id(1L)
