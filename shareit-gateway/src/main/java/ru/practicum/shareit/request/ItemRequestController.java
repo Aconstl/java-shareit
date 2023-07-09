@@ -17,43 +17,43 @@ import javax.validation.constraints.PositiveOrZero;
 @Validated
 public class ItemRequestController {
 
-    private final ItemRequestClient itemIequestClient;
+    private final ItemRequestClient itemRequestClient;
 
     @Autowired
-    public ItemRequestController(ItemRequestClient itemIequestClient) {
-        this.itemIequestClient = itemIequestClient;
+    public ItemRequestController(ItemRequestClient itemRequestClient) {
+        this.itemRequestClient = itemRequestClient;
     }
 
     @PostMapping
     public ResponseEntity<Object> newItemRequest(@RequestHeader("X-Sharer-User-Id") long userId,
                                          @RequestBody @Valid ItemRequestDto itemRequestDto) {
-        log.info("Добавляется новый запрос вещи: {}", itemRequestDto);
-        return itemIequestClient.newItemRequest(userId, itemRequestDto);
+        log.info("Добавляется новый запрос предмета");
+        return itemRequestClient.newItemRequest(userId, itemRequestDto);
     }
 
     @GetMapping
-    public ResponseEntity<Object> getMyItemRequest(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public ResponseEntity<Object> getUserItemRequest(@RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("Ищутся все request");
-        return itemIequestClient.getMyItemRequest(userId);
+        return itemRequestClient.getUserItemRequest(userId);
     }
 
     @GetMapping("/all")
     public ResponseEntity<Object> getAllItemRequest(@RequestHeader("X-Sharer-User-Id") long userId,
                                               @PositiveOrZero
-                                              @RequestParam(value = "from", required = false, defaultValue = "0")
+                                              @RequestParam(value = "from", defaultValue = "0")
                                               Integer from,
                                               @Positive
-                                              @RequestParam(value = "size", required = false, defaultValue = "10")
+                                              @RequestParam(value = "size", defaultValue = "10")
                                               Integer size) {
-        log.info("Ищется список запрос от пользователя с идентификатором: {}", userId);
-        return itemIequestClient.getAllItemRequest(userId, from, size);
+        log.info("Ищется список запрос от пользователя с id №{}", userId);
+        return itemRequestClient.getAllItemRequest(userId, from, size);
     }
 
     @GetMapping("/{requestId}")
     public ResponseEntity<Object> getItemRequest(@RequestHeader("X-Sharer-User-Id") long userId,
                                            @PathVariable Long requestId) {
-        log.info("Ищется запрос по идентификатору: {}", requestId);
-        return itemIequestClient.getItemRequest(userId, requestId);
+        log.info("Ищется запрос по id №{}", requestId);
+        return itemRequestClient.getItemRequest(userId, requestId);
     }
 }
 

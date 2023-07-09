@@ -43,7 +43,7 @@ class ItemRequestServiceInDbIntegrationTest {
         assertNotNull(itemRequest);
         assertEquals(itemRequest.getId(),1L);
 
-        List<ItemRequest> listItemRequest = itemRequestService.getMyItemRequest(user2.getId());
+        List<ItemRequest> listItemRequest = itemRequestService.getUserItemRequest(user2.getId());
         assertEquals(listItemRequest.size(),1);
         assertEquals(listItemRequest.get(0).getId(),1L);
 

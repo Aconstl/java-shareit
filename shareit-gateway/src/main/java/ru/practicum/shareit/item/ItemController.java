@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.ArrayList;
 
 @Slf4j
 @RestController
@@ -33,19 +35,19 @@ public class ItemController {
     @GetMapping("/{itemId}")
     public ResponseEntity<Object> getItem(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                @PathVariable Long itemId) {
-        log.trace("получение предмета");
+        log.trace("получение предмета c id №{}", itemId);
         return itemClient.getItem(userId, itemId);
     }
 
     @GetMapping
     public ResponseEntity<Object> getAllItemUsers(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                   @PositiveOrZero
-                                                   @RequestParam (value = "from", required = false, defaultValue = "0")
+                                                   @RequestParam (value = "from", defaultValue = "0")
                                                            Long from,
                                                   @Positive
-                                                   @RequestParam (value = "size", required = false, defaultValue = "10")
+                                                   @RequestParam (value = "size", defaultValue = "10")
                                                            Long size) {
-        log.trace("вывод всех предметов пользователя");
+        log.trace("вывод всех предметов пользователя c id №{}", userId);
         return itemClient.getAllItemUsers(userId, from, size);
     }
 
@@ -53,25 +55,30 @@ public class ItemController {
     public ResponseEntity<Object> searchItem(@RequestHeader("X-Sharer-User-Id") Long userId,
                                              @RequestParam(value = "text", required = false) String text,
                                              @PositiveOrZero
-                                             @RequestParam(value = "from", required = false, defaultValue = "0")
+                                             @RequestParam(value = "from", defaultValue = "0")
                                              Long from,
                                              @Positive
-                                             @RequestParam(value = "size", required = false, defaultValue = "10")
+                                             @RequestParam(value = "size", defaultValue = "10")
                                              Long size) {
-        log.trace("поиск предмета по имени");
-        return itemClient.searchItem(userId, text, from, size);
+        log.trace("поиск предмета по имени: {}",text);
+        if (!text.isBlank()) {
+            return itemClient.searchItem(userId, text, from, size);
+        } else {
+            return ResponseEntity.accepted().body(new ArrayList<>());
+        }
+       // return itemClient.searchItem(userId, text, from, size);
     }
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> updateItem(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long itemId,
                                              @RequestBody ItemDto itemDto) {
-        log.trace("обновление предмета");
+        log.trace("обновление предмета c id №{}",itemId);
         return itemClient.updateItem(userId, itemId, itemDto);
     }
 
     @DeleteMapping("/{itemId}")
     public void deleteItem(@PathVariable Long itemId) {
-        log.trace("удаление предмета");
+        log.trace("удаление предмета с id №{}",itemId);
         itemClient.deleteItem(itemId);
     }
 
@@ -79,7 +86,7 @@ public class ItemController {
     public ResponseEntity<Object> postComment(@RequestHeader("X-Sharer-User-Id") Long userId,
                                               @PathVariable Long itemId,
                                               @RequestBody @Valid CommentDtoIn commentDtoIn) {
-        log.trace("Добавление комментария к предмету");
+        log.trace("Добавление комментария к предмету с id №{}",itemId);
         return itemClient.postComment(userId, itemId, commentDtoIn);
     }
 

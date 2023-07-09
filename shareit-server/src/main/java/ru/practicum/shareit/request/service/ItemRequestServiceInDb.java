@@ -42,7 +42,7 @@ public class ItemRequestServiceInDb implements ItemRequestService {
         return itemRequestRepository.save(itemRequest);
     }
 
-    public List<ItemRequest> getMyItemRequest(Long userId) {
+    public List<ItemRequest> getUserItemRequest(Long userId) {
         log.trace("получение списка запросов пользователя");
         User user = userService.get(userId);
         List<ItemRequest> listItemRequest = itemRequestRepository.findByAuthor_IdOrderByCreatedAsc(user.getId());

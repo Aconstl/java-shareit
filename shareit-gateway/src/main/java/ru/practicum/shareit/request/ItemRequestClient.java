@@ -30,7 +30,7 @@ public class ItemRequestClient extends BaseClient {
         return post("", userId, itemRequestDto);
     }
 
-    public ResponseEntity<Object> getMyItemRequest(long userId) {
+    public ResponseEntity<Object> getUserItemRequest(long userId) {
         return get("", userId);
     }
 

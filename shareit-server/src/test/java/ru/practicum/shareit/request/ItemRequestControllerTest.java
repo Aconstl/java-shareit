@@ -65,7 +65,7 @@ class ItemRequestControllerTest {
 
     @Test
     public void getMyItemRequestTest() throws Exception {
-        when(itemRequestService.getMyItemRequest(anyLong()))
+        when(itemRequestService.getUserItemRequest(anyLong()))
                 .thenAnswer(u -> {
                     ItemRequest request1 = new ItemRequest(1L,"description1",new User(),
                             LocalDateTime.now(),new ArrayList<>());

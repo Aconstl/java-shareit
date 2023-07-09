@@ -153,12 +153,18 @@ public class ItemServiceInDb implements ItemService {
     @Transactional
     public List<Item> search(String text, Long from, Long size) {
         log.trace("поиск предмета по имени");
+
+        Pageable pageable = Pagination.setPageable(from,size);
+        return itemRepository.searchItem(text.toLowerCase(),pageable).getContent();
+
+        /*
         if (!text.isBlank()) {
             Pageable pageable = Pagination.setPageable(from,size);
             return itemRepository.searchItem(text.toLowerCase(),pageable).getContent();
         } else {
             return new ArrayList<>();
         }
+        */
     }
 
     @Override

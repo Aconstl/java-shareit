@@ -40,14 +40,14 @@ public class BookingController {
     public ResponseEntity<Object> changeStatus(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                @PathVariable Long bookingId,
                                                @RequestParam(value = "approved") String approved) {
-        log.trace("смена статуса бронирования");
+        log.trace("смена статуса бронирования id №{}",bookingId);
         return bookingClient.changeStatus(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
     public ResponseEntity<Object> getBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
                                              @PathVariable Long bookingId) {
-        log.trace("получение данных бронирования");
+        log.trace("получение данных бронирования id №{}",bookingId);
         return bookingClient.getBooking(userId, bookingId);
     }
 
@@ -58,21 +58,21 @@ public class BookingController {
                                               Integer from,
                                               @Positive @RequestParam(name = "size", defaultValue = "10")
                                               Integer size) {
-        log.trace("Получение бронирования пользователя");
+        log.trace("Получение бронирования пользователя с id №{}",userId);
         StatusForSearch state = StatusForSearch.from(stateParam)
                 .orElseThrow(() -> new UnsopportedStatus("Unknown state: UNSUPPORTED_STATUS"));
         return bookingClient.getBookingUser(userId, state, from, size);
     }
 
     @GetMapping("/owner")
-    public ResponseEntity<Object> getBookingOwner(@RequestHeader("X-Sharer-User-Id") long userId,
+    public ResponseEntity<Object> getBookingOwner(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                      @RequestParam(name = "state", defaultValue = "all")
                                                      String stateParam,
                                                      @PositiveOrZero @RequestParam(name = "from", defaultValue = "0")
                                                      Integer from,
                                                      @Positive @RequestParam(name = "size", defaultValue = "10")
                                                      Integer size) {
-        log.trace("Получение бронирования владельца");
+        log.trace("Получение бронирования владельцас id №{}",userId);
         StatusForSearch state = StatusForSearch.from(stateParam)
                 .orElseThrow(() -> new UnsopportedStatus("Unknown state: UNSUPPORTED_STATUS"));
         return bookingClient.getBookingOwner(userId, state, from, size);

@@ -67,7 +67,7 @@ class ItemRequestServiceInDbTest {
         when(itemRequestRepository.findByAuthor_IdOrderByCreatedAsc(anyLong()))
                 .thenReturn(List.of(ItemRequestMapper.fromDto(itemRequestDto,user)));
 
-        List<ItemRequest> requests = itemRequestService.getMyItemRequest(1L);
+        List<ItemRequest> requests = itemRequestService.getUserItemRequest(1L);
         assertEquals(requests.size(),1);
         assertEquals(requests.get(0).getDescription(),"description1");
         verify(itemRequestRepository,times(1)).findByAuthor_IdOrderByCreatedAsc(anyLong());
