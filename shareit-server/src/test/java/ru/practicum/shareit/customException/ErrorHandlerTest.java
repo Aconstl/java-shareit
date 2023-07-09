@@ -2,11 +2,13 @@ package ru.practicum.shareit.customException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.DirtiesContext;
 
 import javax.validation.ValidationException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
 class ErrorHandlerTest {
 
     private ErrorHandler errorHandler;

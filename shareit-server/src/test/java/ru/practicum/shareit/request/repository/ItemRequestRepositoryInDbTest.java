@@ -15,6 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
 class ItemRequestRepositoryInDbTest {
 
     @Autowired
