@@ -7,7 +7,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserDto;
 
-import javax.validation.ValidationException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -97,8 +96,6 @@ class UserServiceInDbIntegrationTest {
         User user = userService.update(1L,userDtoUpdate);
         assertEquals(user.getName(),"user1Update");
         assertEquals(user.getEmail(),"user1Update@mail.ru");
-//        assertThrows(ValidationException.class,() -> userService.update(null,userDtoUpdate));
- //       assertThrows(ValidationException.class,() -> userService.update(0L,userDtoUpdate));
     }
 
 }

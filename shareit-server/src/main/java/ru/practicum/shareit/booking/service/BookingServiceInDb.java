@@ -36,12 +36,6 @@ public class BookingServiceInDb implements  BookingService {
     @Transactional
     public Booking create(Long userId, BookingDtoIn bookingDtoIn) {
         log.trace("создание бронирования");
-        /*
-        if (bookingDtoIn.getStart().isAfter(bookingDtoIn.getEnd()) ||
-                bookingDtoIn.getStart().isEqual(bookingDtoIn.getEnd())) {
-            throw new ValidationException("время бронирования указано некорректно");
-        }
-        */
         User user = userService.get(userId);
         Item item = itemService.find(bookingDtoIn.getItemId());
         if (item.getOwner().getId().equals(user.getId())) {

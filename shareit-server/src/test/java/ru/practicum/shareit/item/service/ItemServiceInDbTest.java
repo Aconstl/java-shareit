@@ -81,8 +81,6 @@ class ItemServiceInDbTest {
                 .thenReturn(Optional.of(item));
         when(bookingRepository.getLastBooking(itemDto.getId()))
                 .thenReturn(null);
- //       when(bookingRepository.getNextBooking(itemDto.getId(),LocalDateTime.now()))
-  //              .thenReturn(null);
         when(commentRepository.findAllByItemId(itemDto.getId()))
                 .thenReturn(new ArrayList<>());
 
@@ -175,8 +173,6 @@ class ItemServiceInDbTest {
                 .thenReturn(1L);
 
         //Неудачные обновления
-//        assertThrows(ValidationException.class, () -> itemService.update(1L,null,itemDtoUpd));
- //       assertThrows(ValidationException.class, () -> itemService.update(1L,0L,itemDtoUpd));
         assertThrows(IllegalArgumentException.class, () -> itemService.update(2L,itemDto.getId(),itemDtoUpd));
 
         when(itemRepository.findById(1L))
@@ -195,11 +191,6 @@ class ItemServiceInDbTest {
 
         List<Item> searchRes = itemService.search("itemupd",null,null);
         assertEquals(searchRes.size(),1);
- /*
-        List<Item> searchResEmpty = itemService.search("",null,null);
-        assertEquals(searchResEmpty.size(),0);
-        verify(itemRepository,times(1)).searchItem(anyString(),any(Pageable.class));
- */
         itemService.delete(1L);
         verify(itemRepository,times(1)).deleteById(1L);
 
@@ -231,8 +222,6 @@ class ItemServiceInDbTest {
     public void getAllItemUsersTest() {
         User user1 = new User(1L,"user1","user1@mail.ru");
         User user2 = new User(2L,"user2","user2@mail.ru");
-
-        ItemRequest request = new ItemRequest("need item",user1,LocalDateTime.now());
 
         ItemDto itemDto = ItemDto.builder()
                 .id(1L)

@@ -33,13 +33,6 @@ class ErrorHandlerTest {
     }
 
     @Test
-    void validateArgumentExceptionTest() {
-    //    ErrorResponse response = errorHandler.validateArgumentException(new MethodArgumentNotValidException("MethodArgumentNotValidException"));
-    //    assertEquals(response.getError(),"Ошибка ввода: ");
-    //    assertEquals(response.getDescription(),"IllegalArgumentException");
-    }
-
-    @Test
     void validateExceptionTest() {
         ErrorResponse response = errorHandler.validateException(new ValidationException("ValidationException"));
         assertEquals(response.getError(),"Ошибка валидации: ");
@@ -53,11 +46,4 @@ class ErrorHandlerTest {
         assertEquals(response.getDescription(),"Exception");
     }
 
-    /*
-    @Test
-    void exception2Test() {
-        ErrorResponseOne response = errorHandler.exception(new UnsopportedStatus("UnsopportedStatus"));
-        assertEquals(response.getError(),"UnsopportedStatus");
-    }
-     */
 }

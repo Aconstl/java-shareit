@@ -11,7 +11,6 @@ import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepositoryInDb;
 import org.mockito.*;
 
-import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -130,7 +129,5 @@ class UserServiceInDbTest {
         assertEquals(user.getEmail(),"user1Update@mail.ru");
         verify(userRepository,times(1)).updateUsername(1L,userDtoUpdate.getName());
         verify(userRepository,times(1)).updateUserEmail(1L,userDtoUpdate.getEmail());
-       // assertThrows(ValidationException.class,() -> userService.update(null,userDtoUpdate));
-       // assertThrows(ValidationException.class,() -> userService.update(0L,userDtoUpdate));
     }
 }
