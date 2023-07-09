@@ -76,7 +76,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public ResponseEntity<Object> postComment(@RequestParam("X-Sharer-User-Id") Long userId,
+    public ResponseEntity<Object> postComment(@RequestHeader("X-Sharer-User-Id") Long userId,
                                               @PathVariable Long itemId,
                                               @RequestBody @Valid CommentDtoIn commentDtoIn) {
         log.trace("Добавление комментария к предмету");
