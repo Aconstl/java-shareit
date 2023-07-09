@@ -2,7 +2,6 @@ package ru.practicum.shareit.item;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -64,7 +63,7 @@ public class ItemController {
         if (!text.isBlank()) {
             return itemClient.searchItem(userId, text, from, size);
         } else {
-            return ResponseEntity.accepted().body(new ArrayList<>());
+            return ResponseEntity.ok().body(new ArrayList<>());
         }
        // return itemClient.searchItem(userId, text, from, size);
     }
