@@ -31,7 +31,7 @@ class BookingRepositoryInDbTest {
     BookingRepositoryInDb bookingRepository;
 
     @Test
-    @DirtiesContext
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     public void testFindAllByBookerIdOrderByIdDesc() {
         User user = new User(1L,"user1","user1@mail.ru");
         userRepository.save(user);
@@ -64,7 +64,7 @@ class BookingRepositoryInDbTest {
     }
 
     @Test
-    @DirtiesContext
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     public void testFindAllByStatusAndItemInOrderByStartAsc() {
         User user = new User(1L,"user1","user1@mail.ru");
         userRepository.save(user);
@@ -101,7 +101,7 @@ class BookingRepositoryInDbTest {
     }
 
     @Test
-    @DirtiesContext
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     public void testFindBookingUserCurrentAndFutureAndPast() {
         User user = new User(1L, "user1", "user1@mail.ru");
         userRepository.save(user);
@@ -148,7 +148,7 @@ class BookingRepositoryInDbTest {
     }
 
     @Test
-    @DirtiesContext
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     public void testFindBookingOwnerAllAndCurrentAndFutureAndPast() {
         User user = new User(1L,"user1","user1@mail.ru");
         userRepository.save(user);
@@ -201,7 +201,7 @@ class BookingRepositoryInDbTest {
     }
 
     @Test
-    @DirtiesContext
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     public void testChangeStatus() {
         User user = new User(1L,"user1","user1@mail.ru");
         userRepository.save(user);
@@ -226,7 +226,7 @@ class BookingRepositoryInDbTest {
     }
 
     @Test
-    @DirtiesContext
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     public void testIdOwnerItem() {
         User user = new User(1L,"user1","user1@mail.ru");
         userRepository.save(user);
@@ -249,7 +249,7 @@ class BookingRepositoryInDbTest {
     }
 
     @Test
-    @DirtiesContext
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     public void testGetIdBooker() {
         User user = new User(1L,"user1","user1@mail.ru");
         userRepository.save(user);
@@ -272,7 +272,7 @@ class BookingRepositoryInDbTest {
     }
 
     @Test
-    @DirtiesContext
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     public void testGetStatusBooking() {
         User user = new User(1L,"user1","user1@mail.ru");
         userRepository.save(user);
@@ -293,7 +293,7 @@ class BookingRepositoryInDbTest {
     }
 
     @Test
-    @DirtiesContext
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     public void testGetLastAndNextBooking() {
         User user = new User(1L,"user1","user1@mail.ru");
         userRepository.save(user);
