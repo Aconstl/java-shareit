@@ -48,10 +48,4 @@ public class ErrorHandler {
         return new ErrorResponse("Исключение: ", e.getMessage());
     }
 
-    @ExceptionHandler
-    @ResponseStatus (HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponseOne exception(final UnsopportedStatus u) {
-        log.error("Ошибка 500: {}", u.getMessage());
-        return new ErrorResponseOne(u.getMessage());
-    }
 }

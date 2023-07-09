@@ -156,15 +156,6 @@ public class ItemServiceInDb implements ItemService {
 
         Pageable pageable = Pagination.setPageable(from,size);
         return itemRepository.searchItem(text.toLowerCase(),pageable).getContent();
-
-        /*
-        if (!text.isBlank()) {
-            Pageable pageable = Pagination.setPageable(from,size);
-            return itemRepository.searchItem(text.toLowerCase(),pageable).getContent();
-        } else {
-            return new ArrayList<>();
-        }
-        */
     }
 
     @Override
@@ -188,29 +179,6 @@ public class ItemServiceInDb implements ItemService {
             }
         }
         return find(itemId);
-        /*
-        if (itemId == null || itemId == 0) {
-            throw new ValidationException("предмет имеет ошибочное id");
-        } else {
-            if (!itemRepository.getOwnerId(itemId).equals(userId)) {
-                throw new IllegalArgumentException("пользователь не является собственником указанного предмета");
-           } else {
-                String name = itemDto.getName();
-                String description = itemDto.getDescription();
-                Boolean available = itemDto.getAvailable();
-                if (itemDto.getName() != null) {
-                    itemRepository.updateName(itemId,name);
-                }
-                if (itemDto.getDescription() != null) {
-                    itemRepository.updateDescription(itemId, description);
-                }
-                if (itemDto.getAvailable() != null) {
-                    itemRepository.updateAvailable(itemId, available);
-                }
-            }
-        }
-        return find(itemId);
-         */
     }
 
     @Override

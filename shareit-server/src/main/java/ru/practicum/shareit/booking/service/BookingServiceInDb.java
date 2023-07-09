@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Pagination;
 import ru.practicum.shareit.booking.model.*;
 import ru.practicum.shareit.booking.repository.BookingRepositoryInDb;
-import ru.practicum.shareit.customException.UnsopportedStatus;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemServiceInDb;
 import ru.practicum.shareit.user.model.User;
@@ -37,10 +36,12 @@ public class BookingServiceInDb implements  BookingService {
     @Transactional
     public Booking create(Long userId, BookingDtoIn bookingDtoIn) {
         log.trace("создание бронирования");
+        /*
         if (bookingDtoIn.getStart().isAfter(bookingDtoIn.getEnd()) ||
                 bookingDtoIn.getStart().isEqual(bookingDtoIn.getEnd())) {
             throw new ValidationException("время бронирования указано некорректно");
         }
+        */
         User user = userService.get(userId);
         Item item = itemService.find(bookingDtoIn.getItemId());
         if (item.getOwner().getId().equals(user.getId())) {
@@ -99,23 +100,19 @@ public class BookingServiceInDb implements  BookingService {
     public List<Booking> getBookingUser(Long userId, String state, Long from, Long size) {
         log.trace("Получение бронирования пользователя");
         userService.get(userId);
-        try {
-            Pageable pageable = Pagination.setPageable(from,size);
-            StatusForSearch status = StatusForSearch.valueOf(state);
-            switch (status) {
-                case ALL:
-                    return bookingRepository.findAllByBookerIdOrderByIdDesc(userId, pageable).getContent();
-                case CURRENT:
-                    return bookingRepository.findBookingUserCurrent(userId, pageable).getContent();
-                case PAST:
-                    return bookingRepository.findBookingUserPast(userId, pageable).getContent();
-                case FUTURE:
-                    return bookingRepository.findBookingUserFuture(userId, pageable).getContent();
-                default:
-                    return bookingRepository.findBookingUserStatus(userId, status.toString(), pageable).getContent();
-            }
-        } catch (Exception e) {
-            throw new UnsopportedStatus("Unknown state: UNSUPPORTED_STATUS");
+        Pageable pageable = Pagination.setPageable(from,size);
+        StatusForSearch status = StatusForSearch.valueOf(state);
+        switch (status) {
+            case ALL:
+                return bookingRepository.findAllByBookerIdOrderByIdDesc(userId, pageable).getContent();
+            case CURRENT:
+                return bookingRepository.findBookingUserCurrent(userId, pageable).getContent();
+            case PAST:
+                return bookingRepository.findBookingUserPast(userId, pageable).getContent();
+            case FUTURE:
+                return bookingRepository.findBookingUserFuture(userId, pageable).getContent();
+            default:
+                return bookingRepository.findBookingUserStatus(userId, status.toString(), pageable).getContent();
         }
     }
 
@@ -123,24 +120,20 @@ public class BookingServiceInDb implements  BookingService {
      public List<Booking> getBookingOwner(Long ownerId, String state, Long from, Long size) {
         log.trace("Получение бронирования владельца");
         userService.get(ownerId);
-        try {
-            Pageable pageable = Pagination.setPageable(from,size);
-            StatusForSearch status = StatusForSearch.valueOf(state);
-            switch (status) {
-                case ALL:
-                    return bookingRepository.findBookingOwnerAll(ownerId,pageable).getContent();
-                case CURRENT:
-                    return bookingRepository.findBookingOwnerCurrent(ownerId,pageable).getContent();
-                case PAST:
-                    return bookingRepository.findBookingOwnerPast(ownerId,pageable).getContent();
-                case FUTURE:
-                    return bookingRepository.findBookingOwnerFuture(ownerId,pageable).getContent();
-                default:
-                    return bookingRepository.findBookingOwnerStatus(ownerId,status.toString(),pageable).getContent();
-            }
-        } catch (Exception e) {
-            throw new UnsopportedStatus("Unknown state: UNSUPPORTED_STATUS");
+        Pageable pageable = Pagination.setPageable(from, size);
+        StatusForSearch status = StatusForSearch.valueOf(state);
+        switch (status) {
+            case ALL:
+                return bookingRepository.findBookingOwnerAll(ownerId, pageable).getContent();
+            case CURRENT:
+                return bookingRepository.findBookingOwnerCurrent(ownerId, pageable).getContent();
+            case PAST:
+                return bookingRepository.findBookingOwnerPast(ownerId, pageable).getContent();
+            case FUTURE:
+                return bookingRepository.findBookingOwnerFuture(ownerId, pageable).getContent();
+            default:
+                return bookingRepository.findBookingOwnerStatus(ownerId, status.toString(), pageable).getContent();
         }
-     }
+    }
 
 }
